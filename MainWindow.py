@@ -63,19 +63,45 @@ class MainWindow(QWidget):
 
     def on_forwardBtn_clicked(self):
         print("Forward !")
-        self.moves.walk_forward(num_steps=2, start_foot='auto', turn=0, step_length=25, move_time=1500)
+        if not self.moves.marty.is_moving():
+            self.moves.walk(num_steps=2, start_foot='auto', turn=0, step_length=25, move_time=1500)
 
     def on_rightBtn_clicked(self):
         print("Right !")
+        if not self.moves.marty.is_moving():
+            self.moves.sidestep(side="right", steps=2, step_length=35, move_time=1000, blocking=True)
 
     def on_backwardBtn_clicked(self):
         print("Backward !")
+        if not self.moves.marty.is_moving():
+            self.moves.walk(num_steps=2, start_foot='auto', turn=0, step_length=-25, move_time=1500)
 
     def on_leftBtn_clicked(self):
         print("Left !")
+        if not self.moves.marty.is_moving():
+            self.moves.sidestep(side="left", steps=2, step_length=35, move_time=1000, blocking=True)
 
     def on_btn_rotate_left_clicked(self):
         print("Rotate Left !")
+        if not self.moves.marty.is_moving():
+            self.moves.arms(left_angle=0, right_angle=135, move_time=1000, blocking=True)
+
+            # Recul du pied gauche
+            self.moves.walk(num_steps=1, start_foot='left', turn=0, step_length=-15, move_time=1500)
+
+            # Rotation autour du pied droit
+            self.moves.walk(num_steps=1, start_foot='right', turn=30, step_length=0, move_time=1500)
+            self.moves.arms(left_angle=0, right_angle=0, move_time=1000, blocking=True)
 
     def on_btn_rotate_right_clicked(self):
         print("Rotate Right !")
+        if not self.moves.marty.is_moving():
+            self.moves.arms(left_angle=0, right_angle=135, move_time=1000, blocking=True)
+
+            # Recul du pied droit
+            self.moves.walk(num_steps=1, start_foot='right', turn=0, step_length=-15, move_time=1500)
+
+            # Rotation autour du pied gauche
+            self.moves.walk(num_steps=1, start_foot='left', turn=-30, step_length=0, move_time=1500)
+            self.moves.arms(left_angle=0, right_angle=0, move_time=1000, blocking=True)
+
