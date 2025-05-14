@@ -32,7 +32,6 @@ class Moves:
                 move_time=move_time,
                 blocking=blocking
             )
-            print("Marty is walking forward!")
             return True
         except MartyConnectException as e:
             print(f"Failed to make Marty walk: {e}")
@@ -52,7 +51,6 @@ class Moves:
                 move_time=move_time,
                 blocking=blocking
             )
-            print(f"Marty is sidestepping to the {side}!")
             return True
         except MartyConnectException as e:
             print(f"Failed to make Marty sidestep: {e}")
@@ -69,7 +67,6 @@ class Moves:
                 move_time=move_time,
                 blocking=blocking
             )
-            print(f"Marty's arms moved to left: {left_angle}, right: {right_angle}!")
             return True
         except MartyConnectException as e:
             print(f"Failed to move Marty's arms: {e}")
