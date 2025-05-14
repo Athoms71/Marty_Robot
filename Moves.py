@@ -73,3 +73,19 @@ class Moves:
         except Exception as e:
             print(f"Unexpected error while moving Marty's arms: {e}")
         return False
+
+    def dance(self, side: str = 'right', move_time: int = 3000,
+              blocking: Optional[bool] = None) -> bool:
+        try:
+            self.marty.dance(
+                side=side,
+                move_time=move_time,
+                blocking=blocking
+            )
+            print(f"Marty is dancing, starting on the {side} side!")
+            return True
+        except MartyConnectException as e:
+            print(f"Failed to make Marty dance: {e}")
+        except Exception as e:
+            print(f"Unexpected error while dancing: {e}")
+        return False
