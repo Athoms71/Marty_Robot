@@ -16,6 +16,7 @@ def main():
     moves = Moves(controller.marty)
     window = MainWindow(moves)
     window.show()
+    moves.get_ready(blocking=True)
 
     # Main loop
     sys.exit(app.exec_())
