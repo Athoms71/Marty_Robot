@@ -10,56 +10,24 @@ class Emotion:
 
     def action(self, robot: Marty):
         if self.name == "angry":
-            try:
-                robot.eyes("angry", 500, True)
-            except Exception as e:
-                print(f"Error for emotion 'Angry': {e}")
-                return False
-            return True
+            robot.eyes("angry", 500, True)
+            robot.disco_color("red")
         elif self.name == "excited":
-            try:
-                robot.eyes("excited", 500, True)
-            except Exception as e:
-                print(f"Error for emotion 'Excited': {e}")
-                return False
-            return True
+            robot.eyes("excited", 500, True)
         elif self.name == "normal":
-            try:
-                robot.eyes("normal", 500, True)
-            except Exception as e:
-                print(f"Error for emotion 'Normal': {e}")
-                return False
-            return True
+            robot.eyes("normal", 500, True)
         elif self.name == "wide":
-            try:
-                robot.eyes("wide", 500, True)
-            except Exception as e:
-                print(f"Error for emotion 'Wide': {e}")
-                return False
-            return True
+            robot.eyes("wide", 500, True)
         elif self.name == "wiggle":
-            try:
-                robot.eyes("wiggle", 500, True)
-            except Exception as e:
-                print(f"Error for emotion 'Wiggle': {e}")
-                return False
-            return True
-        else:
-            return "I have no emotion."
+            robot.eyes("wiggle", 500, True)
 
 
 try:
     robot = Marty("wifi", "192.168.0.101")
+    if not robot.is_conn_ready():
+        raise Exception("Marty is not connected")
+    else:
+        angry = Emotion("angry")
+        angry.action(robot)
 except Exception as e:
     print(f"Error connecting to Marty: {e}")
-
-angry = Emotion("angry")
-angry.action(robot)
-excited = Emotion("excited")
-excited.action(robot)
-normal = Emotion("normal")
-normal.action(robot)
-wide = Emotion("wide")
-wide.action(robot)
-wiggle = Emotion("wiggle")
-wiggle.action(robot)
