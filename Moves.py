@@ -17,7 +17,7 @@ class Moves:
             print(f"Unexpected error while getting Marty ready: {e}")
         return False
 
-    def walk_forward(self, num_steps: int = 2,
+    def walk(self, num_steps: int = 2,
                      start_foot: str = 'auto',
                      turn: int = 0,
                      step_length: int = 25,
@@ -38,4 +38,24 @@ class Moves:
             print(f"Failed to make Marty walk: {e}")
         except Exception as e:
             print(f"Unexpected error while walking: {e}")
+        return False
+
+    def sidestep(self, side: str, steps: int = 2,
+                 step_length: int = 35,
+                 move_time: int = 1000,
+                 blocking: Optional[bool] = None) -> bool:
+        try:
+            self.marty.sidestep(
+                side=side,
+                steps=steps,
+                step_length=step_length,
+                move_time=move_time,
+                blocking=blocking
+            )
+            print(f"Marty is sidestepping to the {side}!")
+            return True
+        except MartyConnectException as e:
+            print(f"Failed to make Marty sidestep: {e}")
+        except Exception as e:
+            print(f"Unexpected error while sidestepping: {e}")
         return False

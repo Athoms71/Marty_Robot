@@ -14,10 +14,9 @@ def main():
     app = QApplication(sys.argv)
 
     moves = Moves(controller.marty)
+    moves.get_ready()
     window = MainWindow(moves)
     window.show()
-    moves.get_ready(blocking=True)
-
     # Main loop
     sys.exit(app.exec_())
 

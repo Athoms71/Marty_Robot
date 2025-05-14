@@ -50,7 +50,7 @@ class MainWindow(QWidget):
 
     def on_forwardBtn_clicked(self):
         print("Forward !")
-        self.moves.walk_forward(num_steps=10, start_foot='auto', turn=0, step_length=25, move_time=1500)
+        self.moves.walk(num_steps=10, start_foot='auto', turn=0, step_length=25, move_time=1500)
 
     def on_rightBtn_clicked(self):
         print("Right !")
