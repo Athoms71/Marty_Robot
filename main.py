@@ -5,19 +5,19 @@ from MainWindow import MainWindow
 from Moves import Moves
 
 def main():
-    # Initialiser QApplication
-    app = QApplication(sys.argv)
-
-    # Connecter Marty
+    # Connect to Marty
     controller = MartyController(method="wifi", locator="192.168.0.101")
     if not controller.connect():
         sys.exit(1)
+
+    # Initialize QApplication
+    app = QApplication(sys.argv)
 
     moves = Moves(controller.marty)
     window = MainWindow(moves)
     window.show()
 
-    # Boucle principale
+    # Main loop
     sys.exit(app.exec_())
 
 if __name__ == "__main__":
