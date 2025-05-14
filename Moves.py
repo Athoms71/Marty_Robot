@@ -59,3 +59,20 @@ class Moves:
         except Exception as e:
             print(f"Unexpected error while sidestepping: {e}")
         return False
+
+    def arms(self, left_angle: int, right_angle: int, move_time: int,
+             blocking: Optional[bool] = None) -> bool:
+        try:
+            self.marty.arms(
+                left_angle=left_angle,
+                right_angle=right_angle,
+                move_time=move_time,
+                blocking=blocking
+            )
+            print(f"Marty's arms moved to left: {left_angle}, right: {right_angle}!")
+            return True
+        except MartyConnectException as e:
+            print(f"Failed to move Marty's arms: {e}")
+        except Exception as e:
+            print(f"Unexpected error while moving Marty's arms: {e}")
+        return False
