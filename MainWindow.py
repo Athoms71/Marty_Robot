@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import QWidget, QPushButton, QVBoxLayout, QApplication, QGridLayout
 from PyQt5.QtGui import QIcon
+from Moves import Moves
 
 class MainWindow(QWidget):
     def __init__(self):
@@ -48,6 +49,7 @@ class MainWindow(QWidget):
 
     def on_forwardBtn_clicked(self):
         print("Forward !")
+        Moves.walk_forward()
 
     def on_rightBtn_clicked(self):
         print("Right !")
