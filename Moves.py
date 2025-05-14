@@ -1,16 +1,28 @@
 from martypy.Exceptions import MartyConnectException
 from martypy import Marty
+from typing import Optional
 
 class Moves:
     def __init__(self, marty: Marty):
         self.marty = marty
+
+    def get_ready(self, blocking: Optional[bool] = None) -> bool:
+        try:
+            self.marty.get_ready(blocking=blocking)
+            print("Marty is ready!")
+            return True
+        except MartyConnectException as e:
+            print(f"Failed to get Marty ready: {e}")
+        except Exception as e:
+            print(f"Unexpected error while getting Marty ready: {e}")
+        return False
 
     def walk_forward(self, num_steps: int = 2,
                      start_foot: str = 'auto',
                      turn: int = 0,
                      step_length: int = 25,
                      move_time: int = 1500,
-                     blocking: bool = True) -> bool:
+                     blocking: Optional[bool] = None) -> bool:
         try:
             self.marty.walk(
                 num_steps=num_steps,
