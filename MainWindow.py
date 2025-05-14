@@ -1,10 +1,11 @@
-from PyQt5.QtWidgets import QWidget, QPushButton, QVBoxLayout, QApplication, QGridLayout
+from PyQt5.QtWidgets import QWidget, QPushButton, QGridLayout
 from PyQt5.QtGui import QIcon
-from Moves import Moves
+from PyQt5.QtCore import Qt
 
 class MainWindow(QWidget):
-    def __init__(self):
+    def __init__(self, moves):
         super().__init__()
+        self.moves = moves
         self.setWindowTitle("Marty Robot")
         self.resize(1280, 720)
 
@@ -49,7 +50,7 @@ class MainWindow(QWidget):
 
     def on_forwardBtn_clicked(self):
         print("Forward !")
-        Moves.walk_forward()
+        self.moves.walk_forward(num_steps=10, start_foot='auto', turn=0, step_length=25, move_time=1500)
 
     def on_rightBtn_clicked(self):
         print("Right !")
