@@ -55,6 +55,7 @@ class MainWindow(QWidget):
         gridButtons.addWidget(btn_rotate_left, 0, 0)
         gridButtons.addWidget(btn_rotate_right, 0, 2)
 
+
         # Add container to resize gridButtons
         container = QWidget(self)
         container.setLayout(gridButtons)
