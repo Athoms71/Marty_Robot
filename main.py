@@ -3,6 +3,8 @@ import sys
 from PyQt5.QtWidgets import QApplication, QMessageBox
 from martypy import Marty
 from MainWindow import MainWindow
+from Moves import Moves
+
 
 def main():
     app = QApplication.instance()
@@ -26,5 +28,6 @@ def main():
 if __name__ == "__main__":
     controller = MartyController(method="wifi", locator="192.168.0.101")
     if controller.connect():
-        controller.marty.dance()
+        walker = Moves(controller.marty)
+        walker.walk(num_steps=10, start_foot='auto', turn=0, step_length=25, move_time=1500)
     main()
