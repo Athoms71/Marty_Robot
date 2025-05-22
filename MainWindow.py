@@ -6,9 +6,10 @@ class MainWindow(QWidget):
     def __init__(self, moves):
         super().__init__()
         self.setWindowTitle("Optimus Prime")
+        self.resize(1280, 720)
 
         self.moves = moves
-        self.resize(1280, 720)
+        self.list_mode = False
 
         # Forward Button
         btn_forward = QPushButton(self)
@@ -64,11 +65,11 @@ class MainWindow(QWidget):
         btn_circle_dance.setFixedSize(100, 100)
         btn_circle_dance.clicked.connect(self.on_btn_circle_dance_clicked)
 
-        #  Button
-        btn_circle_dance = QPushButton(self)
-        btn_circle_dance.setIcon(QIcon("buttons/btn_circle_dance.png"))
-        btn_circle_dance.setFixedSize(100, 100)
-        btn_circle_dance.clicked.connect(self.on_btn_circle_dance_clicked)
+        # Switch Mode Button
+        btn_switch_mode = QPushButton(self)
+        btn_switch_mode.setIcon(QIcon("buttons/btn_switch_mode1.png"))
+        btn_switch_mode.setFixedSize(100, 100)
+        btn_switch_mode.clicked.connect(self.on_btn_switch_mode_clicked)
 
         # Create grid layout
         grid_moves = QGridLayout()
@@ -152,3 +153,12 @@ class MainWindow(QWidget):
         print("Circle Dance !")
         if not self.moves.marty.is_moving():
             self.moves.dance()
+
+    def on_btn_switch_mode_clicked(self):
+        if (self.list_mode):
+            self.btn_switch_mode.setIcon(QIcon("buttons/btn_switch_mode1.png"))
+            self.list_mode = False
+
+        else:
+            self.btn_switch_mode.setIcon(QIcon("buttons/btn_switch_mode2.png"))
+            self.list_mode = True
