@@ -32,7 +32,7 @@ class Moves:
                 move_time=move_time,
                 blocking=blocking
             )
-            print("Marty is walking forward!")
+            print("Marty is walking!")
             return True
         except MartyConnectException as e:
             print(f"Failed to make Marty walk: {e}")
@@ -91,4 +91,18 @@ class Moves:
             print(f"Failed to make Marty dance: {e}")
         except Exception as e:
             print(f"Unexpected error while dancing: {e}")
+        return False
+
+    def celebrate(self, move_time: int = 4000, blocking: Optional[bool] = None) -> bool:
+        try:
+            self.marty.celebrate(
+                move_time=move_time,
+                blocking=blocking
+            )
+            print(f"Marty celebrate!")
+            return True
+        except MartyConnectException as e:
+            print(f"Failed to make Marty celebrate: {e}")
+        except Exception as e:
+            print(f"Unexpected error while celebrating: {e}")
         return False
