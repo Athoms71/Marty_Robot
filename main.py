@@ -18,8 +18,6 @@ def main():
     marty.get_ready()
     moves = Moves(marty)
 
-    moves.turn()
-
     window = MainWindow(moves)
     window.show()
     # Main loop
