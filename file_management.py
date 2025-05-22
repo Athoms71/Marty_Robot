@@ -18,7 +18,7 @@ def write_file(file_path, content: str):
     """Write a string to a file with format 'color;left;right'."""
     # Check if the file exists
     try:
-        with open(file_path, 'r') as file:
+        with open(file_path, 'a') as file:
             file.write(content)
     except FileNotFoundError:
         print(f"File {file_path} not found. Creating a new file.")

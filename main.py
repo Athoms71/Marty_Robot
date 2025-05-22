@@ -15,15 +15,11 @@ def main():
 
     # Initialize QApplication
     app = QApplication(sys.argv)
-    capteur.Capteur.battery(controller.marty)
-    capteur.Capteur.colorsensor(controller.marty)
-    capteur.Capteur.distance(controller.marty)
-    capteur.Capteur.obsacle(controller.marty)
+    capteur.Capteur.colorsensor(marty,["blue","vert","rouge"])
 
     marty.get_ready()
     moves = Moves(marty)
 
-    moves.walkcase(1, "backward")
 
     window = MainWindow(moves)
     window.show()
