@@ -11,6 +11,8 @@ def main():
     marty = Marty(method="wifi", locator="192.168.0.101")
     if not marty.is_conn_ready():
         raise Exception("Marty is not connected")
+    else:
+        print("Marty connected !")
 
     # Initialize QApplication
     app = QApplication(sys.argv)
