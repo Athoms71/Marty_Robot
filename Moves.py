@@ -17,5 +17,30 @@ class Moves:
 
     def circletime(self, time: int = 1):
         for i in range(time):
-            self.marty.circle_dance(side="right", move_time=1000)
-            self.marty.circle_dance(side="left", move_time=1000)
+            self.marty.arms(left_angle=0, right_angle=135, move_time=500, blocking=False)
+            self.marty.circle_dance(side="right", move_time=1000, blocking=False)
+            self.marty.arms(left_angle=135, right_angle=0, move_time=500, blocking=False)
+            self.marty.circle_dance(side="left", move_time=1000, blocking=False)
+
+    def turn(self, side: str = "left"):
+        if side == "left":
+            self.marty.arms(left_angle=0, right_angle=135, move_time=500, blocking=False)
+            for i in range(2):
+                # Recul du pied gauche
+                self.marty.walk(num_steps=1, start_foot='left', turn=0, step_length=-15, move_time=1500)
+
+                # Rotation autour du pied droit
+                self.marty.walk(num_steps=1, start_foot='right', turn=30, step_length=0, move_time=1500)
+                self.marty.walk(num_steps=1, start_foot='left', turn=0, step_length=0, move_time=1500)
+            self.marty.arms(left_angle=0, right_angle=0, move_time=500, blocking=False)
+        else:
+            self.marty.arms(left_angle=0, right_angle=135, move_time=500, blocking=False)
+            for i in range(2):
+                # Recul du pied droit
+                self.marty.walk(num_steps=1, start_foot='right', turn=0, step_length=-15, move_time=1500)
+
+                # Rotation autour du pied gauche
+                self.marty.walk(num_steps=1, start_foot='left', turn=-30, step_length=0, move_time=1500)
+                self.marty.walk(num_steps=1, start_foot='right', turn=0, step_length=0, move_time=1500)
+            self.marty.arms(left_angle=0, right_angle=0, move_time=500, blocking=False)
+
