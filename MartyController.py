@@ -11,19 +11,6 @@ class MartyController:
         self.kwargs = kwargs
         self.marty = None
 
-    def connect(self) -> bool:
-        try:
-            self.marty = Marty(self.method, self.locator, blocking=self.blocking, *self.args, **self.kwargs)
-            print("Successfully connected to Marty!")
-            return True
-        except MartyConnectException as e:
-            print(f"Failed to connect to Marty: {e}")
-        except TimeoutError:
-            print("Connection to Marty timed out. Please check the IP address or connection settings.")
-        except Exception as e:
-            print(f"An unexpected error occurred: {e}")
-        return False
-
     def get_ready(self):
         self.marty.get_ready()
 

@@ -1,23 +1,24 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QMessageBox
+from martypy import Marty
+
 from MartyController import MartyController
 from MainWindow import MainWindow
 from Moves import Moves
 
 def main():
     # Connect to Marty
-    martyController = MartyController(method="wifi", locator="192.168.0.101")
-    if not martyController.connect():
-        sys.exit(1)
+    marty = Marty(method="wifi", locator="192.168.0.101")
+    if not marty.is_conn_ready():
+        raise Exception("Marty is not connected")
 
     # Initialize QApplication
     app = QApplication(sys.argv)
 
-    martyController.get_ready()
-    marty = martyController.get_marty()
+    marty.get_ready()
     moves = Moves(marty)
 
-    moves.walkcase(1)
+    moves.walkcase(1, "backward")
 
     window = MainWindow(moves)
     window.show()
