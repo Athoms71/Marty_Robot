@@ -7,8 +7,8 @@ from Moves import Moves
 def main():
     # Connect to Marty
     controller = MartyController(method="wifi", locator="192.168.0.101")
-    if not controller.connect():
-        sys.exit(1)
+    #if not controller.connect():
+    #    sys.exit(1)
 
     # Initialize QApplication
     app = QApplication(sys.argv)

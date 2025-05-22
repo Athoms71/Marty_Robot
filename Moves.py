@@ -32,6 +32,7 @@ class Moves:
                 move_time=move_time,
                 blocking=blocking
             )
+            print("Marty is walking!")
             return True
         except MartyConnectException as e:
             print(f"Failed to make Marty walk: {e}")
@@ -74,7 +75,7 @@ class Moves:
             print(f"Unexpected error while moving Marty's arms: {e}")
         return False
 
-    def dance(self, side: str = 'right', move_time: int = 3000,
+    def dance(self, side: str = "right", move_time: int = 3000,
               blocking: Optional[bool] = None) -> bool:
         try:
             self.marty.dance(
@@ -88,4 +89,34 @@ class Moves:
             print(f"Failed to make Marty dance: {e}")
         except Exception as e:
             print(f"Unexpected error while dancing: {e}")
+        return False
+
+    def celebrate(self, move_time: int = 4000, blocking: Optional[bool] = None) -> bool:
+        try:
+            self.marty.celebrate(
+                move_time=move_time,
+                blocking=blocking
+            )
+            print(f"Marty celebrate!")
+            return True
+        except MartyConnectException as e:
+            print(f"Failed to make Marty celebrate: {e}")
+        except Exception as e:
+            print(f"Unexpected error while celebrating: {e}")
+        return False
+
+    def circle_dance(self, side: str = "right", move_time: int = 2500,
+                     blocking: Optional[bool] = None) -> bool:
+        try:
+            self.marty.circle_dance(
+                side=side,
+                move_time=move_time,
+                blocking=blocking
+            )
+            print(f"Marty circle_dance!")
+            return True
+        except MartyConnectException as e:
+            print(f"Failed to make Marty circle dance: {e}")
+        except Exception as e:
+            print(f"Unexpected error while circle dance: {e}")
         return False

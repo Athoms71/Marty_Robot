@@ -5,8 +5,9 @@ from PyQt5.QtCore import Qt
 class MainWindow(QWidget):
     def __init__(self, moves):
         super().__init__()
-        self.moves = moves
         self.setWindowTitle("Optimus Prime")
+
+        self.moves = moves
         self.resize(1280, 720)
 
         # Forward Button
@@ -63,6 +64,12 @@ class MainWindow(QWidget):
         btn_circle_dance.setFixedSize(100, 100)
         btn_circle_dance.clicked.connect(self.on_btn_circle_dance_clicked)
 
+        #  Button
+        btn_circle_dance = QPushButton(self)
+        btn_circle_dance.setIcon(QIcon("buttons/btn_circle_dance.png"))
+        btn_circle_dance.setFixedSize(100, 100)
+        btn_circle_dance.clicked.connect(self.on_btn_circle_dance_clicked)
+
         # Create grid layout
         grid_moves = QGridLayout()
         # Place buttons in grid
@@ -112,26 +119,24 @@ class MainWindow(QWidget):
     def on_btn_rotate_left_clicked(self):
         print("Rotate Left !")
         if not self.moves.marty.is_moving():
-            self.moves.arms(left_angle=0, right_angle=135, move_time=1000, blocking=True)
+            self.moves.arms(left_angle=0, right_angle=135, move_time=1000, blocking=False)
 
-            # Recul du pied gauche
             self.moves.walk(num_steps=1, start_foot='left', turn=0, step_length=-15, move_time=1500)
-
-            # Rotation autour du pied droit
             self.moves.walk(num_steps=1, start_foot='right', turn=30, step_length=0, move_time=1500)
-            self.moves.arms(left_angle=0, right_angle=0, move_time=1000, blocking=True)
+            self.moves.walk(num_steps=1, start_foot='left', turn=0, step_length=0, move_time=1500)
+
+            self.moves.arms(left_angle=0, right_angle=0, move_time=1000, blocking=False)
 
     def on_btn_rotate_right_clicked(self):
         print("Rotate Right !")
         if not self.moves.marty.is_moving():
-            self.moves.arms(left_angle=0, right_angle=135, move_time=1000, blocking=True)
+            self.moves.arms(left_angle=0, right_angle=135, move_time=1000, blocking=False)
 
-            # Recul du pied droit
             self.moves.walk(num_steps=1, start_foot='right', turn=0, step_length=-15, move_time=1500)
-
-            # Rotation autour du pied gauche
             self.moves.walk(num_steps=1, start_foot='left', turn=-30, step_length=0, move_time=1500)
-            self.moves.arms(left_angle=0, right_angle=0, move_time=1000, blocking=True)
+            self.moves.walk(num_steps=1, start_foot='right', turn=0, step_length=0, move_time=1500)
+
+            self.moves.arms(left_angle=0, right_angle=0, move_time=1000, blocking=False)
 
     def on_btn_classic_dance_clicked(self):
         print("Classic Dance !")
