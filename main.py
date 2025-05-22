@@ -17,8 +17,6 @@ def main():
     marty = martyController.get_marty()
     moves = Moves(marty)
 
-    moves.walkcase(1)
-
     window = MainWindow(moves)
     window.show()
     # Main loop
