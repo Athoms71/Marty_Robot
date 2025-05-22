@@ -69,7 +69,15 @@ class MainWindow(QWidget):
         btn_switch_mode = QPushButton(self)
         btn_switch_mode.setIcon(QIcon("buttons/btn_switch_mode1.png"))
         btn_switch_mode.setFixedSize(100, 100)
+        btn_switch_mode.setGeometry(100, 100, 100, 100)
         btn_switch_mode.clicked.connect(self.on_btn_switch_mode_clicked)
+
+        # Crosse all cases Button
+        btn_cross_all_cases = QPushButton(self)
+        btn_cross_all_cases.setIcon(QIcon("buttons/btn_cross_all_cases.png"))
+        btn_cross_all_cases.setFixedSize(200, 100)
+        btn_cross_all_cases.setGeometry(100, 100, 100, 100)
+        btn_cross_all_cases.clicked.connect(self.on_btn_cross_all_cases_clicked)
 
         # Create grid layout
         grid_moves = QGridLayout()
@@ -97,74 +105,59 @@ class MainWindow(QWidget):
         container_dances.setLayout(grid_dances)
         container_dances.setGeometry(500, 300, 400, 400) # x, y, width, height
 
-        btn_switch_mode.setGeometry(100, 100, 100, 100)
-
-
     def on_forwardBtn_clicked(self):
-        if (self.list_mode):
+        if not (self.list_mode):
             print("Forward !")
             if not self.moves.marty.is_moving():
-                self.moves.walk(num_steps=2, start_foot='auto', turn=0, step_length=25, move_time=1500)
+                self.moves.walkcase(1, "forward")
 
     def on_rightBtn_clicked(self):
-        if (self.list_mode):
+        if not (self.list_mode):
             print("Right !")
             if not self.moves.marty.is_moving():
-                self.moves.sidestep(side="right", steps=2, step_length=35, move_time=1000, blocking=True)
+                self.moves.sidecase(1, "right")
 
     def on_backwardBtn_clicked(self):
-        if (self.list_mode):
+        if not (self.list_mode):
             print("Backward !")
             if not self.moves.marty.is_moving():
-                self.moves.walk(num_steps=2, start_foot='auto', turn=0, step_length=-25, move_time=1500)
+                self.moves.walkcase(1, "backward")
 
     def on_leftBtn_clicked(self):
-        if (self.list_mode):
+        if not (self.list_mode):
             print("Left !")
             if not self.moves.marty.is_moving():
-                self.moves.sidestep(side="left", steps=2, step_length=35, move_time=1000, blocking=True)
+                self.moves.sidecase(1, "left")
 
     def on_btn_rotate_left_clicked(self):
-        if (self.list_mode):
+        if not (self.list_mode):
             print("Rotate Left !")
             if not self.moves.marty.is_moving():
-                self.moves.arms(left_angle=0, right_angle=135, move_time=1000, blocking=False)
-
-                self.moves.walk(num_steps=1, start_foot='left', turn=0, step_length=-15, move_time=1500)
-                self.moves.walk(num_steps=1, start_foot='right', turn=30, step_length=0, move_time=1500)
-                self.moves.walk(num_steps=1, start_foot='left', turn=0, step_length=0, move_time=1500)
-
-                self.moves.arms(left_angle=0, right_angle=0, move_time=1000, blocking=False)
+                a = 0
 
     def on_btn_rotate_right_clicked(self):
-        if (self.list_mode):
+        if not (self.list_mode):
             print("Rotate Right !")
             if not self.moves.marty.is_moving():
-                self.moves.arms(left_angle=0, right_angle=135, move_time=1000, blocking=False)
-
-                self.moves.walk(num_steps=1, start_foot='right', turn=0, step_length=-15, move_time=1500)
-                self.moves.walk(num_steps=1, start_foot='left', turn=-30, step_length=0, move_time=1500)
-                self.moves.walk(num_steps=1, start_foot='right', turn=0, step_length=0, move_time=1500)
-
-                self.moves.arms(left_angle=0, right_angle=0, move_time=1000, blocking=False)
+                a = 0
 
     def on_btn_classic_dance_clicked(self):
-        if (self.list_mode):
+        if not (self.list_mode):
             print("Classic Dance !")
             if not self.moves.marty.is_moving():
                 self.moves.dance()
 
     def on_btn_celebrate_dance_clicked(self):
-        if (self.list_mode):
+        if not (self.list_mode):
             print("Celebrate Dance !")
             if not self.moves.marty.is_moving():
                 self.moves.dance()
 
     def on_btn_circle_dance_clicked(self):
-        if (self.list_mode):
+        if not (self.list_mode):
             print("Circle Dance !")
             if not self.moves.marty.is_moving():
-                self.moves.dance()
+                self.moves.circletime(1)
 
     def on_btn_switch_mode_clicked(self):
         if (self.list_mode):
@@ -174,3 +167,7 @@ class MainWindow(QWidget):
         else:
             self.btn_switch_mode.setIcon(QIcon("buttons/btn_switch_mode2.png"))
             self.list_mode = True
+
+    def on_btn_cross_all_cases_clicked():
+        if not (self.list_mode):
+            
