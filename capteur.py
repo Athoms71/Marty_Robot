@@ -45,9 +45,9 @@ class Capteur:
             calibrate(Marty)
         except Exception as e:
             print(f"Failed to read Marty obstacle: {e}")
-
+"""
         print("right: ", )
-        print("left: ", )
+        print("left: ", )"""
 
 
 def calibrate(Marty):
