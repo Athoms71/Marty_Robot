@@ -25,11 +25,3 @@ def write_file(file_path: str, content: str):
             file.write(content)
     except FileNotFoundError:
         print(f"File {file_path} not found. Creating a new file.")
-
-
-def del_file(file_path: str):
-    """Delete a file."""
-    try:
-        os.remove(file_path)
-    except FileNotFoundError:
-        print(f"File {file_path} not found.")
