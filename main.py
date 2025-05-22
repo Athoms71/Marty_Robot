@@ -7,8 +7,8 @@ import capteur
 
 def main():
     # Connect to Marty
-    controller = MartyController(method="wifi", locator="192.168.0.101")
-    if not controller.connect():
+    martyController = MartyController(method="wifi", locator="192.168.0.101")
+    if not martyController.connect():
         sys.exit(1)
 
     # Initialize QApplication
@@ -18,8 +18,10 @@ def main():
     capteur.Capteur.distance(controller.marty)
     capteur.Capteur.obsacle(controller.marty)
 
-    moves = Moves(controller.marty)
-    moves.get_ready()
+    martyController.get_ready()
+    marty = martyController.get_marty()
+    moves = Moves(marty)
+
     window = MainWindow(moves)
     window.show()
     # Main loop
