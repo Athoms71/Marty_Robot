@@ -5,8 +5,9 @@ from PyQt5.QtCore import Qt
 class MainWindow(QWidget):
     def __init__(self, moves):
         super().__init__()
-        self.moves = moves
         self.setWindowTitle("Optimus Prime")
+
+        self.moves = moves
         self.resize(1280, 720)
 
         # Forward Button
@@ -45,21 +46,55 @@ class MainWindow(QWidget):
         btn_rotate_right.setFixedSize(100, 100)
         btn_rotate_right.clicked.connect(self.on_btn_rotate_right_clicked)
 
+        # Classic Dance Button
+        btn_classic_dance = QPushButton(self)
+        btn_classic_dance.setIcon(QIcon("buttons/btn_classic_dance.png"))
+        btn_classic_dance.setFixedSize(100, 100)
+        btn_classic_dance.clicked.connect(self.on_btn_classic_dance_clicked)
+
+        # Celebrate Dance Button
+        btn_celebrate_dance = QPushButton(self)
+        btn_celebrate_dance.setIcon(QIcon("buttons/btn_celebrate_dance.png"))
+        btn_celebrate_dance.setFixedSize(100, 100)
+        btn_celebrate_dance.clicked.connect(self.on_btn_celebrate_dance_clicked)
+
+        # Circle Dance Button
+        btn_circle_dance = QPushButton(self)
+        btn_circle_dance.setIcon(QIcon("buttons/btn_circle_dance.png"))
+        btn_circle_dance.setFixedSize(100, 100)
+        btn_circle_dance.clicked.connect(self.on_btn_circle_dance_clicked)
+
+        #  Button
+        btn_circle_dance = QPushButton(self)
+        btn_circle_dance.setIcon(QIcon("buttons/btn_circle_dance.png"))
+        btn_circle_dance.setFixedSize(100, 100)
+        btn_circle_dance.clicked.connect(self.on_btn_circle_dance_clicked)
+
         # Create grid layout
-        gridButtons = QGridLayout()
+        grid_moves = QGridLayout()
         # Place buttons in grid
-        gridButtons.addWidget(btn_forward, 0, 1)
-        gridButtons.addWidget(btn_right, 1, 2)
-        gridButtons.addWidget(btn_backward, 2, 1)
-        gridButtons.addWidget(btn_left, 1, 0)
-        gridButtons.addWidget(btn_rotate_left, 0, 0)
-        gridButtons.addWidget(btn_rotate_right, 0, 2)
+        grid_moves.addWidget(btn_forward, 0, 1)
+        grid_moves.addWidget(btn_right, 1, 2)
+        grid_moves.addWidget(btn_backward, 2, 1)
+        grid_moves.addWidget(btn_left, 1, 0)
+        grid_moves.addWidget(btn_rotate_left, 0, 0)
+        grid_moves.addWidget(btn_rotate_right, 0, 2)
 
+        # Create grid layout
+        grid_dances = QGridLayout()
+        grid_dances.addWidget(btn_classic_dance, 0, 0)
+        grid_dances.addWidget(btn_celebrate_dance, 0, 1)
+        grid_dances.addWidget(btn_circle_dance, 0, 2)
 
-        # Add container to resize gridButtons
-        container = QWidget(self)
-        container.setLayout(gridButtons)
-        container.setGeometry(0, 300, 400, 400) # x, y, width, height
+        # Add container to resize grid_moves
+        container_moves = QWidget(self)
+        container_moves.setLayout(grid_moves)
+        container_moves.setGeometry(0, 300, 400, 400) # x, y, width, height
+
+        # Add container to resize grid_dances
+        container_dances = QWidget(self)
+        container_dances.setLayout(grid_dances)
+        container_dances.setGeometry(500, 300, 400, 400) # x, y, width, height
 
     def on_forwardBtn_clicked(self):
         print("Forward !")
@@ -84,24 +119,36 @@ class MainWindow(QWidget):
     def on_btn_rotate_left_clicked(self):
         print("Rotate Left !")
         if not self.moves.marty.is_moving():
-            self.moves.arms(left_angle=0, right_angle=135, move_time=1000, blocking=True)
+            self.moves.arms(left_angle=0, right_angle=135, move_time=1000, blocking=False)
 
-            # Recul du pied gauche
             self.moves.walk(num_steps=1, start_foot='left', turn=0, step_length=-15, move_time=1500)
-
-            # Rotation autour du pied droit
             self.moves.walk(num_steps=1, start_foot='right', turn=30, step_length=0, move_time=1500)
-            self.moves.arms(left_angle=0, right_angle=0, move_time=1000, blocking=True)
+            self.moves.walk(num_steps=1, start_foot='left', turn=0, step_length=0, move_time=1500)
+
+            self.moves.arms(left_angle=0, right_angle=0, move_time=1000, blocking=False)
 
     def on_btn_rotate_right_clicked(self):
         print("Rotate Right !")
         if not self.moves.marty.is_moving():
-            self.moves.arms(left_angle=0, right_angle=135, move_time=1000, blocking=True)
+            self.moves.arms(left_angle=0, right_angle=135, move_time=1000, blocking=False)
 
-            # Recul du pied droit
             self.moves.walk(num_steps=1, start_foot='right', turn=0, step_length=-15, move_time=1500)
-
-            # Rotation autour du pied gauche
             self.moves.walk(num_steps=1, start_foot='left', turn=-30, step_length=0, move_time=1500)
-            self.moves.arms(left_angle=0, right_angle=0, move_time=1000, blocking=True)
+            self.moves.walk(num_steps=1, start_foot='right', turn=0, step_length=0, move_time=1500)
 
+            self.moves.arms(left_angle=0, right_angle=0, move_time=1000, blocking=False)
+
+    def on_btn_classic_dance_clicked(self):
+        print("Classic Dance !")
+        if not self.moves.marty.is_moving():
+            self.moves.dance()
+
+    def on_btn_celebrate_dance_clicked(self):
+        print("Celebrate Dance !")
+        if not self.moves.marty.is_moving():
+            self.moves.dance()
+
+    def on_btn_circle_dance_clicked(self):
+        print("Circle Dance !")
+        if not self.moves.marty.is_moving():
+            self.moves.dance()
