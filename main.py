@@ -18,7 +18,7 @@ def main():
     marty.get_ready()
     moves = Moves(marty)
 
-    moves.walkcase(1, "backward")
+    moves.turn()
 
     window = MainWindow(moves)
     window.show()
