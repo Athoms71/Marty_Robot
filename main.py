@@ -6,15 +6,19 @@ from Moves import Moves
 
 def main():
     # Connect to Marty
-    controller = MartyController(method="wifi", locator="192.168.0.101")
-    if not controller.connect():
+    martyController = MartyController(method="wifi", locator="192.168.0.101")
+    if not martyController.connect():
         sys.exit(1)
 
     # Initialize QApplication
     app = QApplication(sys.argv)
 
-    moves = Moves(controller.marty)
-    moves.get_ready()
+    martyController.get_ready()
+    marty = martyController.get_marty()
+    moves = Moves(marty)
+
+    moves.walkcase(1)
+
     window = MainWindow(moves)
     window.show()
     # Main loop

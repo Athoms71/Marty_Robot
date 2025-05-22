@@ -23,3 +23,9 @@ class MartyController:
         except Exception as e:
             print(f"An unexpected error occurred: {e}")
         return False
+
+    def get_ready(self):
+        self.marty.get_ready()
+
+    def get_marty(self):
+        return self.marty
