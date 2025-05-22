@@ -2,24 +2,59 @@ from martypy import Marty
 
 
 class Emotion:
-    def __init__(self, name):
+    def __init__(self, name: str, robot: Marty):
         self.name = name
+        self.robot = robot
 
     def __repr__(self):
-        return f"Emotion(name={self.name})"
+        return f"Emotion (name={self.name})"
 
-    def action(self, robot: Marty):
+    def action(self):
         if self.name == "angry":
-            robot.eyes("angry", 500, True)
-            robot.disco_color("red")
+            self.angry()
         elif self.name == "excited":
-            robot.eyes("excited", 500, True)
+            self.excited()
         elif self.name == "normal":
-            robot.eyes("normal", 500, True)
+            self.normal()
         elif self.name == "wide":
-            robot.eyes("wide", 500, True)
+            self.wide()
         elif self.name == "wiggle":
-            robot.eyes("wiggle", 500, True)
+            self.wiggle()
+
+    def angry(self):
+        self.robot.disco_color("red")
+        self.robot.eyes("angry", 100, True)
+        self.robot.play_sound("angry")
+        self.robot.eyes("normal", 100, True)
+        self.robot.disco_off()
+
+    def excited(self):
+        self.robot.disco_color("green")
+        self.robot.eyes("excited", 100, True)
+        self.robot.play_sound("excited")
+        self.robot.eyes("normal", 100, True)
+        self.robot.disco_off()
+
+    def normal(self):
+        self.robot.disco_color("blue")
+        self.robot.eyes("normal", 100, True)
+        self.robot.play_sound("normal")
+        self.robot.eyes("normal", 100, True)
+        self.robot.disco_off()
+
+    def wide(self):
+        self.robot.disco_color("yellow")
+        self.robot.eyes("wide", 100, True)
+        self.robot.play_sound("wide")
+        self.robot.eyes("normal", 100, True)
+        self.robot.disco_off()
+
+    def wiggle(self):
+        self.robot.disco_color("purple")
+        self.robot.eyes("wiggle", 100, True)
+        self.robot.play_sound("wiggle")
+        self.robot.eyes("normal", 100, True)
+        self.robot.disco_off()
 
 
 try:
@@ -27,7 +62,21 @@ try:
     if not robot.is_conn_ready():
         raise Exception("Marty is not connected")
     else:
-        angry = Emotion("angry")
-        angry.action(robot)
+        # Initialize the feelings
+        angry = Emotion("angry", robot)
+        excited = Emotion("excited", robot)
+        normal = Emotion("normal", robot)
+        wide = Emotion("wide", robot)
+        wiggle = Emotion("wiggle", robot)
+
+        # Perform the actions
+        angry.action()
+        excited.action()
+        normal.action()
+        wide.action()
+        wiggle.action()
+
+        # Close the connection to the robot
+        robot.close()
 except Exception as e:
     print(f"Error connecting to Marty: {e}")
