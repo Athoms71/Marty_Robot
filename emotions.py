@@ -1,4 +1,6 @@
 from martypy import Marty
+import Moves as M
+import time
 
 
 class Emotion:
@@ -12,6 +14,7 @@ class Emotion:
     def action(self):
         if self.name == "angry":
             self.angry()
+            M.Moves(self.robot).get_ready(blocking=True)
         elif self.name == "excited":
             self.excited()
         elif self.name == "normal":
@@ -23,38 +26,38 @@ class Emotion:
 
     def angry(self):
         self.robot.disco_color("red")
-        self.robot.eyes("angry", 100, True)
-        self.robot.play_sound("angry")
-        self.robot.eyes("normal", 100, True)
+        self.robot.eyes("angry", 50, True)
+        time.sleep(0.8)
         self.robot.disco_off()
+        self.robot.eyes("normal", 50, True)
 
     def excited(self):
         self.robot.disco_color("green")
-        self.robot.eyes("excited", 100, True)
-        self.robot.play_sound("excited")
-        self.robot.eyes("normal", 100, True)
+        self.robot.eyes("excited", 50, True)
+        time.sleep(0.8)
         self.robot.disco_off()
+        self.robot.eyes("normal", 50, True)
 
     def normal(self):
         self.robot.disco_color("blue")
-        self.robot.eyes("normal", 100, True)
-        self.robot.play_sound("normal")
-        self.robot.eyes("normal", 100, True)
+        self.robot.eyes("normal", 50, True)
+        time.sleep(0.8)
         self.robot.disco_off()
+        self.robot.eyes("normal", 50, True)
 
     def wide(self):
         self.robot.disco_color("yellow")
-        self.robot.eyes("wide", 100, True)
-        self.robot.play_sound("wide")
-        self.robot.eyes("normal", 100, True)
+        self.robot.eyes("wide", 50, True)
+        time.sleep(0.8)
         self.robot.disco_off()
+        self.robot.eyes("normal", 50, True)
 
     def wiggle(self):
         self.robot.disco_color("purple")
-        self.robot.eyes("wiggle", 100, True)
-        self.robot.play_sound("wiggle")
-        self.robot.eyes("normal", 100, True)
+        self.robot.eyes("wiggle", 50, True)
+        time.sleep(0.8)
         self.robot.disco_off()
+        self.robot.eyes("normal", 50, True)
 
 
 try:
@@ -71,10 +74,10 @@ try:
 
         # Perform the actions
         angry.action()
-        excited.action()
-        normal.action()
-        wide.action()
-        wiggle.action()
+        # excited.action()
+        # normal.action()
+        # wide.action()
+        # wiggle.action()
 
         # Close the connection to the robot
         robot.close()
