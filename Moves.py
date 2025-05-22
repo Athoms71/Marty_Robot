@@ -45,7 +45,6 @@ class Moves:
             self.marty.arms(left_angle=0, right_angle=0, move_time=500, blocking=False)
 
     def calibration_path(self):
-        for i in range(2):
             self.walkcase(2)
             self.turn()
             self.walkcase(1)
@@ -54,3 +53,4 @@ class Moves:
             self.turn("right")
             self.walkcase(1)
             self.turn("right")
+            self.walkcase(2)
