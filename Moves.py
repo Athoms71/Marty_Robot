@@ -75,20 +75,3 @@ class Moves:
                                 turn=0, step_length=0, move_time=1500)
             self.marty.arms(left_angle=0, right_angle=0,
                             move_time=500, blocking=False)
-
-    def calibration_path(self):
-        path = [
-            (1, None),
-            (1, "left"),
-            (1, "left"),
-            (1, None),
-            (1, "right"),
-            (1, "right"),
-            (1, None)
-        ]
-        for steps, direction in path:
-            couleur = C.get_color(self.marty)
-            self.walkcase(steps)
-            fm.write_file("couleur_parcours.txt", f"{couleur[0]};{couleur[1]}")
-            if direction:
-                self.turn(direction)
