@@ -1,6 +1,7 @@
-from PyQt5.QtWidgets import QWidget, QPushButton, QGridLayout
-from PyQt5.QtGui import QIcon
-from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QWidget, QPushButton, QGridLayout, QLabel
+from PyQt5.QtGui import QIcon, QPixmap, QPalette, QBrush
+from PyQt5.QtCore import Qt, QRect
+import sys, os
 
 class MainWindow(QWidget):
     def __init__(self, moves):
@@ -11,77 +12,99 @@ class MainWindow(QWidget):
         self.moves = moves
         self.list_mode = False
 
+        palette = QPalette()
+        pix = QPixmap('background/background.jpg').scaled(self.size(), Qt.KeepAspectRatioByExpanding)
+        palette.setBrush(QPalette.Window, QBrush(pix))
+        self.setPalette(palette)
+        self.setAutoFillBackground(True)
+
         # Forward Button
         btn_forward = QPushButton(self)
         btn_forward.setIcon(QIcon("buttons/btn_forward.png"))
         btn_forward.setFixedSize(100, 100)
+        btn_forward.setIconSize(btn_forward.size())
+        btn_forward.setStyleSheet("border: none; padding: 0px;")
         btn_forward.clicked.connect(self.on_forwardBtn_clicked)
 
         # right Button
         btn_right = QPushButton(self)
         btn_right.setIcon(QIcon("buttons/btn_right.png"))
         btn_right.setFixedSize(100, 100)
+        btn_right.setIconSize(btn_right.size())
+        btn_right.setStyleSheet("border: none; padding: 0px;")
         btn_right.clicked.connect(self.on_rightBtn_clicked)
 
         # backward Button
         btn_backward = QPushButton(self)
         btn_backward.setIcon(QIcon("buttons/btn_backward.png"))
         btn_backward.setFixedSize(100, 100)
+        btn_backward.setIconSize(btn_backward.size())
+        btn_backward.setStyleSheet("border: none; padding: 0px;")
         btn_backward.clicked.connect(self.on_backwardBtn_clicked)
 
         # Left Button
         btn_left = QPushButton(self)
         btn_left.setIcon(QIcon("buttons/btn_left.png"))
         btn_left.setFixedSize(100, 100)
+        btn_left.setIconSize(btn_left.size())
+        btn_left.setStyleSheet("border: none; padding: 0px;")
         btn_left.clicked.connect(self.on_leftBtn_clicked)
 
         # Left Button
         btn_rotate_left = QPushButton(self)
         btn_rotate_left.setIcon(QIcon("buttons/btn_rotate_left.png"))
         btn_rotate_left.setFixedSize(100, 100)
+        btn_rotate_left.setIconSize(btn_rotate_left.size())
+        btn_rotate_left.setStyleSheet("border: none; padding: 0px;")
         btn_rotate_left.clicked.connect(self.on_btn_rotate_left_clicked)
 
         # Right Button
         btn_rotate_right = QPushButton(self)
         btn_rotate_right.setIcon(QIcon("buttons/btn_rotate_right.png"))
         btn_rotate_right.setFixedSize(100, 100)
+        btn_rotate_right.setIconSize(btn_rotate_right.size())
+        btn_rotate_right.setStyleSheet("border: none; padding: 0px;")
         btn_rotate_right.clicked.connect(self.on_btn_rotate_right_clicked)
 
-        # Classic Dance Button
-        btn_classic_dance = QPushButton(self)
-        btn_classic_dance.setIcon(QIcon("buttons/btn_classic_dance.png"))
-        btn_classic_dance.setFixedSize(100, 100)
-        btn_classic_dance.clicked.connect(self.on_btn_classic_dance_clicked)
-
-        # Celebrate Dance Button
-        btn_celebrate_dance = QPushButton(self)
-        btn_celebrate_dance.setIcon(QIcon("buttons/btn_celebrate_dance.png"))
-        btn_celebrate_dance.setFixedSize(100, 100)
-        btn_celebrate_dance.clicked.connect(self.on_btn_celebrate_dance_clicked)
+        # Dominance Dance Button
+        btn_dominance_dance = QPushButton(self)
+        btn_dominance_dance.setIcon(QIcon("buttons/btn_dominance_dance.png"))
+        btn_dominance_dance.setFixedSize(100, 100)
+        btn_dominance_dance.setIconSize(btn_dominance_dance.size())
+        btn_dominance_dance.setStyleSheet("border: none; padding: 0px;")
+        btn_dominance_dance.clicked.connect(self.on_btn_dominance_dance_clicked)
 
         # Circle Dance Button
         btn_circle_dance = QPushButton(self)
         btn_circle_dance.setIcon(QIcon("buttons/btn_circle_dance.png"))
         btn_circle_dance.setFixedSize(100, 100)
+        btn_circle_dance.setIconSize(btn_circle_dance.size())
+        btn_circle_dance.setStyleSheet("border: none; padding: 0px;")
         btn_circle_dance.clicked.connect(self.on_btn_circle_dance_clicked)
 
         # Switch Mode Button
-        btn_switch_mode = QPushButton(self)
-        btn_switch_mode.setIcon(QIcon("buttons/btn_switch_mode1.png"))
-        btn_switch_mode.setFixedSize(100, 100)
-        btn_switch_mode.setGeometry(100, 100, 100, 100)
-        btn_switch_mode.clicked.connect(self.on_btn_switch_mode_clicked)
+        self.btn_switch_mode = QPushButton(self)
+        self.btn_switch_mode.setGeometry(10, 10, 100, 100)
+        self.btn_switch_mode.setStyleSheet("border: none; padding: 0px;")
+        self.btn_switch_mode.clicked.connect(self.on_btn_switch_mode_clicked)
+        self.update_switch_icon()
 
         # Crosse all cases Button
         btn_cross_all_cases = QPushButton(self)
         btn_cross_all_cases.setIcon(QIcon("buttons/btn_cross_all_cases.png"))
-        btn_cross_all_cases.setFixedSize(200, 100)
-        btn_cross_all_cases.setGeometry(100, 100, 100, 100)
+        btn_cross_all_cases.setGeometry(200, 100, 100, 100)
+        btn_cross_all_cases.setIconSize(btn_cross_all_cases.size())
+        btn_cross_all_cases.setStyleSheet("border: none; padding: 0px;")
         btn_cross_all_cases.clicked.connect(self.on_btn_cross_all_cases_clicked)
+
+        self.label = QLabel(self)
+        pixmap = QPixmap("buttons/track.png")
+        self.label.setGeometry(QRect(100, 10, 800, 80))
+        self.label.setPixmap(pixmap)
+        self.label.setScaledContents(True)
 
         # Create grid layout
         grid_moves = QGridLayout()
-        # Place buttons in grid
         grid_moves.addWidget(btn_forward, 0, 1)
         grid_moves.addWidget(btn_right, 1, 2)
         grid_moves.addWidget(btn_backward, 2, 1)
@@ -91,9 +114,8 @@ class MainWindow(QWidget):
 
         # Create grid layout
         grid_dances = QGridLayout()
-        grid_dances.addWidget(btn_classic_dance, 0, 0)
-        grid_dances.addWidget(btn_celebrate_dance, 0, 1)
-        grid_dances.addWidget(btn_circle_dance, 0, 2)
+        grid_dances.addWidget(btn_dominance_dance, 0, 0)
+        grid_dances.addWidget(btn_circle_dance, 0, 1)
 
         # Add container to resize grid_moves
         container_moves = QWidget(self)
@@ -133,41 +155,41 @@ class MainWindow(QWidget):
         if not (self.list_mode):
             print("Rotate Left !")
             if not self.moves.marty.is_moving():
-                a = 0
+                self.moves.turn("left")
 
     def on_btn_rotate_right_clicked(self):
         if not (self.list_mode):
             print("Rotate Right !")
             if not self.moves.marty.is_moving():
-                a = 0
+                self.moves.turn("right")
 
-    def on_btn_classic_dance_clicked(self):
+    def on_btn_dominance_dance_clicked(self):
         if not (self.list_mode):
-            print("Classic Dance !")
+            print("Dominance Dance !")
             if not self.moves.marty.is_moving():
-                self.moves.dance()
-
-    def on_btn_celebrate_dance_clicked(self):
-        if not (self.list_mode):
-            print("Celebrate Dance !")
-            if not self.moves.marty.is_moving():
-                self.moves.dance()
+                self.moves.circletime(1)
 
     def on_btn_circle_dance_clicked(self):
         if not (self.list_mode):
             print("Circle Dance !")
             if not self.moves.marty.is_moving():
-                self.moves.circletime(1)
+                self.moves.circletime(3)
 
-    def on_btn_switch_mode_clicked(self):
-        if (self.list_mode):
-            self.btn_switch_mode.setIcon(QIcon("buttons/btn_switch_mode1.png"))
-            self.list_mode = False
-
+    def update_switch_icon(self):
+        if self.list_mode:
+            icon_path = "buttons/btn_switch_mode2.png"
         else:
-            self.btn_switch_mode.setIcon(QIcon("buttons/btn_switch_mode2.png"))
-            self.list_mode = True
+            icon_path = "buttons/btn_switch_mode1.png"
 
-    def on_btn_cross_all_cases_clicked():
+        self.btn_switch_mode.setIcon(QIcon(icon_path))
+        self.btn_switch_mode.setIconSize(self.btn_switch_mode.size())
+        self.btn_switch_mode.setStyleSheet("border: none; padding: 0px;")
+    
+    def on_btn_switch_mode_clicked(self):
+        self.list_mode = not self.list_mode
+        self.update_switch_icon()
+
+    def on_btn_cross_all_cases_clicked(self):
         if not (self.list_mode):
+            self.moves.calibration_path()
             
