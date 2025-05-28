@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import QWidget, QPushButton, QGridLayout
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt
 
+
 class MainWindow(QWidget):
     def __init__(self, moves):
         super().__init__()
@@ -57,7 +58,8 @@ class MainWindow(QWidget):
         btn_celebrate_dance = QPushButton(self)
         btn_celebrate_dance.setIcon(QIcon("buttons/btn_celebrate_dance.png"))
         btn_celebrate_dance.setFixedSize(100, 100)
-        btn_celebrate_dance.clicked.connect(self.on_btn_celebrate_dance_clicked)
+        btn_celebrate_dance.clicked.connect(
+            self.on_btn_celebrate_dance_clicked)
 
         # Circle Dance Button
         btn_circle_dance = QPushButton(self)
@@ -77,7 +79,8 @@ class MainWindow(QWidget):
         btn_cross_all_cases.setIcon(QIcon("buttons/btn_cross_all_cases.png"))
         btn_cross_all_cases.setFixedSize(200, 100)
         btn_cross_all_cases.setGeometry(100, 100, 100, 100)
-        btn_cross_all_cases.clicked.connect(self.on_btn_cross_all_cases_clicked)
+        btn_cross_all_cases.clicked.connect(
+            self.on_btn_cross_all_cases_clicked)
 
         # Create grid layout
         grid_moves = QGridLayout()
@@ -98,12 +101,12 @@ class MainWindow(QWidget):
         # Add container to resize grid_moves
         container_moves = QWidget(self)
         container_moves.setLayout(grid_moves)
-        container_moves.setGeometry(0, 300, 400, 400) # x, y, width, height
+        container_moves.setGeometry(0, 300, 400, 400)  # x, y, width, height
 
         # Add container to resize grid_dances
         container_dances = QWidget(self)
         container_dances.setLayout(grid_dances)
-        container_dances.setGeometry(500, 300, 400, 400) # x, y, width, height
+        container_dances.setGeometry(500, 300, 400, 400)  # x, y, width, height
 
     def on_forwardBtn_clicked(self):
         if not (self.list_mode):
@@ -167,7 +170,3 @@ class MainWindow(QWidget):
         else:
             self.btn_switch_mode.setIcon(QIcon("buttons/btn_switch_mode2.png"))
             self.list_mode = True
-
-    def on_btn_cross_all_cases_clicked():
-        if not (self.list_mode):
-            
