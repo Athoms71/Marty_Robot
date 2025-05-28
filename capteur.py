@@ -43,27 +43,29 @@ class Capteur:
 
     def  colorsensor(Marty,liste_couleur):
         try:
-            calibrate(Marty,liste_couleur)
-            print(file_management.read_file("calibration.txt"))
+            Capteur.calibrate(Marty,liste_couleur)
+            content = file_management.read_file("calibration.txt")
+            print(content)
         except Exception as e:
-            print(f"Failed to read Marty obstacle: {e}")
+            print(f"Failed to read Marty colorsensor: {e}")
 
 
 
-def calibrate(Marty,liste_couleur):
-    for couleur in liste_couleur :
-        print(f"je calibre la couleur : {couleur} \nmettez la bonne couleur\n")
-        time.sleep(1)
-        print("en cours.")
-        """time.sleep(2)"""
-        print("en cours..")
-        """time.sleep(3)"""
-        valeur_couleur_gauche =int(Marty.get_ground_sensor_reading (str("left")))
-        valeur_couleur_droite =int(Marty.get_ground_sensor_reading (str("right")))
-        print("scannez")
-
-        file_management.write_file("calibration.txt",f"{couleur}:{valeur_couleur_gauche};{valeur_couleur_droite};\n")
-        print("c est ecrit")
+    def calibrate(Marty,liste_couleur):
+        fichier = open("calibration.txt", "w")
+        for couleur in liste_couleur :
+            print(f"je calibre la couleur : {couleur} \nmettez la bonne couleur\n")
+            time.sleep(1)
+            print("en cours.")
+            """time.sleep(2)"""
+            print("en cours..")
+            """time.sleep(3)"""
+            valeur_couleur_gauche =int(Marty.get_ground_sensor_reading (str("left")))
+            valeur_couleur_droite =int(Marty.get_ground_sensor_reading (str("right")))
+            print("scannez")
+            fichier.write(f"{couleur}:{valeur_couleur_gauche};{valeur_couleur_droite};\n")
+            print("c est ecrit")
+        fichier.close()
 
         
     
