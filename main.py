@@ -6,6 +6,7 @@ from MartyController import MartyController
 from MainWindow import MainWindow
 from Moves import Moves
 
+
 def main():
     # Connect to Marty
     marty = Marty(method="wifi", locator="192.168.0.113")
@@ -24,6 +25,7 @@ def main():
     window.show()
     # Main loop
     sys.exit(app.exec_())
+
 
 if __name__ == "__main__":
     main()
