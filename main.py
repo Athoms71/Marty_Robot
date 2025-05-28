@@ -5,6 +5,7 @@ from martypy import Marty
 from MartyController import MartyController
 from MainWindow import MainWindow
 from Moves import Moves
+import capteur
 
 def main():
     # Connect to Marty
@@ -16,6 +17,10 @@ def main():
 
     # Initialize QApplication
     app = QApplication(sys.argv)
+    capteur.Capteur.battery(controller.marty)
+    capteur.Capteur.colorsensor(controller.marty)
+    capteur.Capteur.distance(controller.marty)
+    capteur.Capteur.obsacle(controller.marty)
 
     marty.get_ready()
     moves = Moves(marty)
@@ -27,3 +32,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    
