@@ -13,7 +13,7 @@ class MainWindow(QWidget):
         self.list_mode = False
 
         palette = QPalette()
-        pix = QPixmap('background/background.jpg').scaled(self.size(), Qt.KeepAspectRatioByExpanding)
+        pix = QPixmap('image/background.jpg').scaled(self.size(), Qt.KeepAspectRatioByExpanding)
         palette.setBrush(QPalette.Window, QBrush(pix))
         self.setPalette(palette)
         self.setAutoFillBackground(True)
@@ -92,13 +92,13 @@ class MainWindow(QWidget):
         # Crosse all cases Button
         btn_cross_all_cases = QPushButton(self)
         btn_cross_all_cases.setIcon(QIcon("buttons/btn_cross_all_cases.png"))
-        btn_cross_all_cases.setGeometry(200, 100, 100, 100)
+        btn_cross_all_cases.setGeometry(400, 610, 100, 100)
         btn_cross_all_cases.setIconSize(btn_cross_all_cases.size())
         btn_cross_all_cases.setStyleSheet("border: none; padding: 0px;")
         btn_cross_all_cases.clicked.connect(self.on_btn_cross_all_cases_clicked)
 
         self.label = QLabel(self)
-        pixmap = QPixmap("buttons/track.png")
+        pixmap = QPixmap("image/track.png")
         self.label.setGeometry(QRect(100, 10, 800, 80))
         self.label.setPixmap(pixmap)
         self.label.setScaledContents(True)
@@ -120,12 +120,12 @@ class MainWindow(QWidget):
         # Add container to resize grid_moves
         container_moves = QWidget(self)
         container_moves.setLayout(grid_moves)
-        container_moves.setGeometry(0, 300, 400, 400) # x, y, width, height
+        container_moves.setGeometry(0, 320, 400, 400) # x, y, width, height
 
         # Add container to resize grid_dances
         container_dances = QWidget(self)
         container_dances.setLayout(grid_dances)
-        container_dances.setGeometry(500, 300, 400, 400) # x, y, width, height
+        container_dances.setGeometry(400, 520, 400, 100) # x, y, width, height
 
     def on_forwardBtn_clicked(self):
         if not (self.list_mode):
