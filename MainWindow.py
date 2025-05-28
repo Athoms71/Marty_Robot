@@ -192,4 +192,27 @@ class MainWindow(QWidget):
     def on_btn_cross_all_cases_clicked(self):
         if not (self.list_mode):
             self.moves.calibration_path()
-            
+
+    def keyPressEvent(self, event):
+        if self.list_mode or self.moves.marty.is_moving():
+            return
+
+        key = event.key()
+        if key == Qt.Key_Z:
+            print("Key Z - Forward")
+            self.on_forwardBtn_clicked()
+        elif key == Qt.Key_S:
+            print("Key S - Backward")
+            self.on_backwardBtn_clicked()
+        elif key == Qt.Key_Q:
+            print("Key Q - Left")
+            self.on_leftBtn_clicked()
+        elif key == Qt.Key_D:
+            print("Key D - Right")
+            self.on_rightBtn_clicked()
+        elif key == Qt.Key_A:
+            print("Key A - Rotate Left")
+            self.on_btn_rotate_left_clicked()
+        elif key == Qt.Key_E:
+            print("Key E - Rotate Right")
+            self.on_btn_rotate_right_clicked()
