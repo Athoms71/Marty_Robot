@@ -1,5 +1,4 @@
 from martypy import Marty
-import MartyController
 import mmap
 import time
 import file_management as file_management

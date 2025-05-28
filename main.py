@@ -1,26 +1,26 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QMessageBox
 from martypy import Marty
-
-from MartyController import MartyController
+import file_management as file_management
 from MainWindow import MainWindow
 from Moves import Moves
 import capteur
 
 def main():
     # Connect to Marty
-    marty = Marty(method="wifi", locator="192.168.0.102")
+    marty = Marty(method="wifi", locator="192.168.0.113")
     if not marty.is_conn_ready():
         raise Exception("Marty is not connected")
 
     # Initialize QApplication
     app = QApplication(sys.argv)
-    capteur.Capteur.colorsensor(marty,["blue","vert","rouge"])
+ 
 
     marty.get_ready()
     moves = Moves(marty)
 
-
+    print(file_management.read_mouv("cirle.dance"))
+    print(file_management.read_mouv("real.feels"))
     window = MainWindow(moves)
     window.show()
     # Main loop
