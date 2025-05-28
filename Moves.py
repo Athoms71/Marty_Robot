@@ -41,6 +41,11 @@ class Moves:
             self.marty.circle_dance(
                 side="left", move_time=1000, blocking=False)
 
+    def rollarms(self, time: int = 1):
+        for i in range(time):
+            self.marty.arms(100, 100, 500, True)
+            self.marty.arms(-100, -100, 500, True)
+
     def turn(self, side: str = "left"):
         """
             :param side: Direction du tour ("left" pour gauche ou "right" pour droite). Par défaut, "left".
@@ -61,8 +66,6 @@ class Moves:
             self.marty.arms(left_angle=0, right_angle=0,
                             move_time=500, blocking=False)
         else:
-            self.marty.arms(left_angle=0, right_angle=135,
-                            move_time=500, blocking=False)
             for i in range(2):
                 # Recul du pied droit
                 self.marty.walk(num_steps=1, start_foot='right',
@@ -73,5 +76,11 @@ class Moves:
                                 turn=-30, step_length=0, move_time=1500)
                 self.marty.walk(num_steps=1, start_foot='right',
                                 turn=0, step_length=0, move_time=1500)
-            self.marty.arms(left_angle=0, right_angle=0,
-                            move_time=500, blocking=False)
+
+    def arms(self, arm: int):
+        if arm == 1:
+            self.marty.arms(135, 0, 200, True)
+        elif arm == 2:
+            self.marty.arms(0, 135, 200, True)
+        elif arm == 0:
+            self.marty.arms(135, 135, 200, True)
