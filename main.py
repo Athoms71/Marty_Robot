@@ -9,7 +9,7 @@ import capteur
 
 def main():
     # Connect to Marty
-    marty = Marty(method="wifi", locator="192.168.0.101")
+    marty = Marty(method="wifi", locator="192.168.0.102")
     if not marty.is_conn_ready():
         raise Exception("Marty is not connected")
 

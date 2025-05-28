@@ -57,13 +57,13 @@ class Capteur:
             print(f"je calibre la couleur : {couleur} \nmettez la bonne couleur\n")
             time.sleep(1)
             print("en cours.")
-            """time.sleep(2)"""
+            time.sleep(1)
             print("en cours..")
-            """time.sleep(3)"""
+            time.sleep(1)
             valeur_couleur_gauche =int(Marty.get_ground_sensor_reading (str("left")))
             valeur_couleur_droite =int(Marty.get_ground_sensor_reading (str("right")))
             print("scannez")
-            fichier.write(f"{couleur}:{valeur_couleur_gauche};{valeur_couleur_droite};\n")
+            fichier.write(f"{couleur};{valeur_couleur_gauche};{valeur_couleur_droite};\n")
             print("c est ecrit")
         fichier.close()
 
