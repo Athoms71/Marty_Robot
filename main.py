@@ -5,6 +5,7 @@ import file_management as file_management
 from MainWindow import MainWindow
 from Moves import Moves
 import capteur
+from emotions import *
 
 def main():
     # Connect to Marty
@@ -18,9 +19,7 @@ def main():
 
     marty.get_ready()
     moves = Moves(marty)
-
-    print(file_management.read_mouv("cirle.dance"))
-    print(file_management.read_mouv("real.feels"))
+    dossier_emotion(marty,"real.feels")
     window = MainWindow(moves)
     window.show()
     # Main loop
