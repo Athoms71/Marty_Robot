@@ -6,16 +6,14 @@ from MartyController import MartyController
 from MainWindow import MainWindow
 from Moves import Moves
 
+
 def main():
     # Connect to Marty
-    """
-    marty = Marty(method="wifi", locator="192.168.0.101")
+    marty = Marty(method="wifi", locator="192.168.0.113")
     if not marty.is_conn_ready():
         raise Exception("Marty is not connected")
     else:
         print("Marty connected !")
-    """
-    
     # Initialize QApplication
     app = QApplication(sys.argv)
 
@@ -23,10 +21,12 @@ def main():
     marty = None
 
     moves = Moves(marty)
+
     window = MainWindow(moves)
     window.show()
     # Main loop
     sys.exit(app.exec_())
+
 
 if __name__ == "__main__":
     main()
