@@ -1,4 +1,3 @@
-import file_management as fm
 from Moves import Moves
 from MartyController import MartyController
 
@@ -8,6 +7,7 @@ def play_dance(robot: MartyController, file_path: str):
         movement = Moves()
         fichier = open(file_path, "r")
         lines = fichier.readlines()
+        robot.pos = [(int(lines[0][4])-1)//2, (int(lines[0][4])-1)//2]
         if lines[0][:3] == "SEQ":
             for line in lines[1:]:
                 line = line.split()[0]
@@ -20,8 +20,6 @@ def play_dance(robot: MartyController, file_path: str):
                 elif line[1] == "B":
                     movement.walkcase(int(line[0]), "backward")
         elif lines[0][:-2] == "ABS":
-            robot.pos = [(int(lines[0][3])-1)//2,
-                         (int(lines[0][3])-1)//2]
             for line in lines[1:]:
                 dy = int(line[1])-robot.pos[1]
                 dx = int(line[0])-robot.pos[0]
