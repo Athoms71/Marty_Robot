@@ -35,6 +35,21 @@ def play_dance(robot: MartyController, file_path: str):
                 robot.pos = [int(line[0]), int(line[1])]
 
 
+def go_to_origin(robot: MartyController, dim: int):
+    move = Moves()
+    dx = robot.pos[0]-(dim-1)//2
+    dy = robot.pos[1]-(dim-1)//2
+    if dx < 0:
+        move.sidecase(-dx)
+    else:
+        move.sidecase(dx, "left")
+    if dy < 0:
+        move.walkcase(-dy)
+    else:
+        move.walkcase(dy, "backward")
+    print("Le robot est actuellement au centre de la case")
+
+
 def check_edges(robot: MartyController, deplacement: list[int], dim: int):
     pos_x = robot.pos[0]+deplacement[0]
     pos_y = robot.pos[1]+deplacement[1]
