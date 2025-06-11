@@ -3,9 +3,7 @@ from MartyController import MartyController
 
 
 def play_dance(robot: MartyController, file_path: str):
-    """Lit les fichiers .dance en fonction de leur première ligne :\n
-        - Si ABS : parcourt le chemin absolu depuis le centre de la grille\n
-        - Si SEQ : parcourt le chemin relatif depuis la position de départ"""
+    """Lit les fichiers .dance en fonction de leur première ligne :\n- Si ABS : parcourt le chemin absolu depuis le centre de la grille\n- Si SEQ : parcourt le chemin relatif depuis la position de départ\n"""
     if file_path[-6:] == ".dance":
         movement = Moves()
         fichier = open(file_path, "r")
