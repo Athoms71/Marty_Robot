@@ -71,13 +71,3 @@ def dossier_emotion(robot : Marty,chemin: str):
 
 
 
-try:
-    robot = Marty("wifi", "192.168.0.101")
-    if not robot.is_conn_ready():
-        raise Exception("Marty is not connected")
-    else:
-        
-        # Close the connection to the robot
-        robot.close()
-except Exception as e:
-    print(f"Error connecting to Marty: {e}")
