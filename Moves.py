@@ -98,6 +98,8 @@ class Moves:
 
         dir_index = 0
 
+        # APPEL INITIAL FONCTION CALIBRATION COULEUR
+
         # On commence au centre, donc on effectue le déplacement en spirale
         while total_steps < max_steps:
             for _ in range(2):  # 2 fois à chaque "tour" (spirale)
@@ -106,6 +108,7 @@ class Moves:
                     if total_steps >= max_steps:
                         return  # toutes les cases ont été visitées
                     getattr(self, action)(1, side)
+                    #APPEL FONCTION CALIBRATION COULEUR
                     total_steps += 1
                 dir_index += 1
             steps += 1
