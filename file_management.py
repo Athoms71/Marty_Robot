@@ -15,11 +15,24 @@ def read_file(file_path: str):
     return couleurs
 
 
-def write_file(file_path: str, content: str):
-    """Write a string to a file with format 'a;b;c'."""
-    # Check if the file exists
+def read_mouv(file_path: str):
     try:
-        with open(file_path, 'a') as file:
-            file.write(content)
+        with open(file_path, 'r') as file:
+            lines = file.readlines()
     except FileNotFoundError:
-        print(f"File {file_path} not found. Creating a new file.")
+        print(f"File {file_path} not found.")
+        return
+
+    # Vérifie si au moins une ligne contient un ';'
+    if any(";" in line for line in lines):
+        feel = []
+        for line in lines:
+            parts = line.strip().split(";")
+            if len(parts) >= 3:
+                feel.append([parts[0], parts[1], parts[2]])
+        return feel
+    else:
+        dance = []
+        for line in lines:
+            dance.append(line.strip())
+        return dance

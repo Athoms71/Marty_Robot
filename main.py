@@ -1,11 +1,11 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QMessageBox
 from martypy import Marty
-
-from MartyController import MartyController
+import file_management as file_management
 from MainWindow import MainWindow
 from Moves import Moves
-
+import capteur
+from emotions import *
 
 def main():
     # Connect to Marty
@@ -17,10 +17,11 @@ def main():
 
     # Initialize QApplication
     app = QApplication(sys.argv)
+ 
 
     marty.get_ready()
     moves = Moves(marty)
-
+    dossier_emotion(marty,"real.feels")
     window = MainWindow(moves)
     window.show()
     # Main loop
