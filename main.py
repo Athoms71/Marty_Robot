@@ -19,10 +19,11 @@ def main():
 
     # Initialize QApplication
     app = QApplication(sys.argv)
+ 
 
     marty.get_ready()
     moves = Moves(marty)
-
+    dossier_emotion(marty,"./real.feels")
     window = MainWindow(moves)
     window.show()
     # Main loop
@@ -31,3 +32,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
