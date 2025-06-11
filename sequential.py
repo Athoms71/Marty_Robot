@@ -1,21 +1,38 @@
-import file_management as fm
 from Moves import Moves
+from MartyController import MartyController
 
 
-class Sequence:
-    def __init__(self, name: str, liste_instructions: list):
-        self.name = name
-        self.sequence = self.construction_queue(liste_instructions)
-
-    def construction_queue(self, liste_instructions: list):
-
-        for instr in liste_instructions:
-            fm.write_file("sequence.txt", str(instr)+"\n")
-
-    def play_dance(self, file_path):
+def play_dance(robot: MartyController, file_path: str):
+    if file_path[-6:] == ".dance":
+        movement = Moves()
         fichier = open(file_path, "r")
         lines = fichier.readlines()
-        for line in lines[1:]:
-            line = line.split("")
-            for i in range(int(line[0])):
+        robot.pos = [(int(lines[0][4])-1)//2, (int(lines[0][4])-1)//2]
+        if lines[0][:3] == "SEQ":
+            for line in lines[1:]:
+                line = line.split()[0]
                 if line[1] == "U":
+                    movement.walkcase(int(line[0]))
+                elif line[1] == "R":
+                    movement.sidecase(int(line[0]))
+                elif line[1] == "L":
+                    movement.sidecase(int(line[0]), "left")
+                elif line[1] == "B":
+                    movement.walkcase(int(line[0]), "backward")
+        elif lines[0][:-2] == "ABS":
+            for line in lines[1:]:
+                dy = int(line[1])-robot.pos[1]
+                dx = int(line[0])-robot.pos[0]
+                print(
+                    f"Déplacement horizontal : {dx} / Déplacement vertical : {dy}")
+                print(
+                    f"Arrivée prévue en {robot.pos[0]+dx},{robot.pos[1]+dy} d'après les calculs")
+                if dx < 0:
+                    movement.sidecase(-dx)
+                else:
+                    movement.sidecase(dx, "left")
+                if dy < 0:
+                    movement.walkcase(-dy)
+                else:
+                    movement.walkcase(dy, "backward")
+                robot.pos = [int(line[0]), int(line[1])]
