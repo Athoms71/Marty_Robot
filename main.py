@@ -1,15 +1,18 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QMessageBox
 from martypy import Marty
-
-from MartyController import MartyController
+import file_management as file_management
 from MainWindow import MainWindow
 from Moves import Moves
 from Sequential import Sequential
+import capteur
+from emotions import *
+from MainWindow import MainWindow
+
 
 def main():
-    # Connect to Marty
-    marty = Marty(method="wifi", locator="192.168.0.113")
+   # Connect to Marty
+    marty = Marty(method="wifi", locator="192.168.0.102")
     if not marty.is_conn_ready():
         raise Exception("Marty is not connected")
     else:
@@ -17,6 +20,7 @@ def main():
     
     # Initialize QApplication
     app = QApplication(sys.argv)
+ 
 
     marty.get_ready()
     #marty = None
@@ -32,3 +36,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

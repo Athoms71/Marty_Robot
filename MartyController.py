@@ -10,6 +10,7 @@ class MartyController:
         self.blocking = blocking
         self.args = args
         self.kwargs = kwargs
+        self.pos = [1, 1]
         self.marty = None
 
     def get_ready(self):
