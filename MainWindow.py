@@ -61,6 +61,7 @@ class MainWindow(QWidget):
             btn.setFixedSize(size, size)
             btn.setIconSize(btn.size())
             btn.setStyleSheet("border: none; padding: 0px;")
+            btn.setCursor(Qt.PointingHandCursor)
             btn.clicked.connect(function)
             return btn
 
@@ -81,23 +82,15 @@ class MainWindow(QWidget):
         btn_load_sequencial = make_button('btn_load_sequential.png', 80, self.on_btn_load_sequential_clicked)
 
         # Boutons de mode stockés comme attributs
-        self.btn_normal_mode = QPushButton(self)
-        self.btn_normal_mode.setFixedSize(100, 100)
-        self.btn_normal_mode.clicked.connect(self.on_btn_normal_mode_clicked)
-
-        self.btn_sequential_mode = QPushButton(self)
-        self.btn_sequential_mode.setFixedSize(100, 100)
-        self.btn_sequential_mode.clicked.connect(self.on_btn_sequential_mode_clicked)
-
-        self.btn_mouse_mode = QPushButton(self)
-        self.btn_mouse_mode.setFixedSize(100, 100)
-        self.btn_mouse_mode.clicked.connect(self.on_btn_mouse_mode_clicked)
+        btn_normal_mode = make_button('btn_normal_mode.png', 100, self.on_btn_normal_mode_clicked)
+        btn_sequential_mode = make_button('btn_sequential_mode.png', 100, self.on_btn_sequential_mode_clicked)
+        btn_mouse_mode = make_button('btn_mouse_mode.png', 100, self.on_btn_mouse_mode_clicked)
 
         # Dictionnaire pour mise à jour des icônes
         self.mode_buttons = {
-            0: self.btn_normal_mode,
-            1: self.btn_sequential_mode,
-            2: self.btn_mouse_mode
+            0: btn_normal_mode,
+            1: btn_sequential_mode,
+            2: btn_mouse_mode
         }
         # Initialise les icônes de mode
         self.update_icon_modes()
@@ -115,11 +108,6 @@ class MainWindow(QWidget):
         grid_dances.addWidget(btn_dominance_dance, 0, 0)
         grid_dances.addWidget(btn_circle_dance, 0, 1)
 
-        grid_modes = QGridLayout()
-        grid_modes.addWidget(self.btn_normal_mode, 0, 0)
-        grid_modes.addWidget(self.btn_sequential_mode, 0, 1)
-        grid_modes.addWidget(self.btn_mouse_mode, 0, 2)
-
         grid_other = QGridLayout()
         grid_other.addWidget(btn_calibrate, 0, 0)
 
@@ -127,6 +115,11 @@ class MainWindow(QWidget):
         grid_sequential.addWidget(btn_start_sequencial, 1, 0)
         grid_sequential.addWidget(btn_save_sequencial, 0, 1)
         grid_sequential.addWidget(btn_load_sequencial, 0, 2)
+
+        grid_modes = QGridLayout()
+        grid_modes.addWidget(btn_normal_mode, 0, 0)
+        grid_modes.addWidget(btn_sequential_mode, 0, 1)
+        grid_modes.addWidget(btn_mouse_mode, 0, 2)
 
         # Containers
         container_moves = QWidget(self)
@@ -137,10 +130,6 @@ class MainWindow(QWidget):
         container_dances.setLayout(grid_dances)
         container_dances.setGeometry(10, 200, 240, 120)
 
-        container_modes = QWidget(self)
-        container_modes.setLayout(grid_modes)
-        container_modes.setGeometry(10, 10, 400, 120)
-
         container_other = QWidget(self)
         container_other.setLayout(grid_other)
         container_other.setGeometry(800, 10, 200, 200)
@@ -148,6 +137,10 @@ class MainWindow(QWidget):
         container_sequential = QWidget(self)
         container_sequential.setLayout(grid_sequential)
         container_sequential.setGeometry(420, 353, 300, 200)
+
+        container_modes = QWidget(self)
+        container_modes.setLayout(grid_modes)
+        container_modes.setGeometry(10, 10, 400, 120)
 
     def update_icon_modes(self):
         names = ['normal', 'sequential', 'mouse']
@@ -165,14 +158,19 @@ class MainWindow(QWidget):
             label.deleteLater()
         self.track_labels.clear()
 
-        moves = self.sequential.get_list_moves()  # [[1, 'U'], [2, 'L'], ...]
+        moves = self.sequential.get_list_moves()  # [['1U'], ['2L'], ...]
 
         x_start = 515
         y_start = 465
         size = 56
 
         nb = 0
-        for i, (count, direction) in enumerate(moves):
+        for move in moves:  # Ignore la première ligne
+            if len(move) == 2:
+                count = int(move[0])
+                direction = move[1]
+            else:
+                print("Formal invalide !")
             if direction in self.track_icons:
                 for j in range(count):  # Répète l'icône selon le nombre
                     if nb < 13:
@@ -195,60 +193,38 @@ class MainWindow(QWidget):
                     label.show()
                     self.track_labels.append(label)
                     nb += 1
-    
-
-    def on_btn_normal_mode_clicked(self):
-        self.mode = 0
-        self.update_icon_modes()
-
-    def on_btn_sequential_mode_clicked(self):
-        self.mode = 1
-        self.update_icon_modes()
-
-    def on_btn_mouse_mode_clicked(self):
-        self.mode = 2
-        self.update_icon_modes()
-
-        # Vérifie que la fenêtre n'existe pas déjà ou a été fermée
-        if not hasattr(self, "mouse_tracking_window") or self.mouse_tracking_window is None:
-            self.mouse_tracking_window = MouseTrackingWindow(self.moves.marty, self)
-        elif not self.mouse_tracking_window.isVisible():
-            self.mouse_tracking_window.show()
-        else:
-            self.mouse_tracking_window.activateWindow()
-            self.mouse_tracking_window.raise_()
 
 
     def on_btn_forward_clicked(self):
         if self.mode == 0:
             if self.moves.marty and not self.moves.marty.is_moving():
                 self.moves.walkcase(1, "forward")
-        elif self.mode == 1 and len(self.track_labels) < 28:
-            self.sequential.add_move("U")
+        elif self.mode == 1:
+            self.sequential.add_move('1U')
             self.update_icon_track()
 
     def on_btn_right_clicked(self):
         if self.mode == 0:
             if self.moves.marty and not self.moves.marty.is_moving():
                 self.moves.sidecase(1, "right")
-        elif self.mode == 1 and len(self.track_labels) < 28:
-            self.sequential.add_move("R")
+        elif self.mode == 1:
+            self.sequential.add_move('1R')
             self.update_icon_track()
 
     def on_btn_backward_clicked(self):
         if self.mode == 0:
             if self.moves.marty and not self.moves.marty.is_moving():
                 self.moves.walkcase(1, "backward")
-        elif self.mode == 1 and len(self.track_labels) < 28:
-            self.sequential.add_move("B")
+        elif self.mode == 1:
+            self.sequential.add_move('1B')
             self.update_icon_track()
 
     def on_btn_left_clicked(self):
         if self.mode == 0:
             if self.moves.marty and not self.moves.marty.is_moving():
                 self.moves.sidecase(1, "left")
-        elif self.mode == 1 and len(self.track_labels) < 28:
-            self.sequential.add_move("L")
+        elif self.mode == 1:
+            self.sequential.add_move('1L')
             self.update_icon_track()
 
     def on_btn_rotate_left_clicked(self):
@@ -258,32 +234,6 @@ class MainWindow(QWidget):
     def on_btn_rotate_right_clicked(self):
         if self.mode == 0 and self.moves.marty and not self.moves.marty.is_moving():
             self.moves.turn("right")
-
-    def on_btn_dominance_dance_clicked(self):
-        if self.mode == 0 and self.moves.marty and not self.moves.marty.is_moving():
-            self.moves.circletime(1)
-
-    def on_btn_circle_dance_clicked(self):
-        if self.mode == 0 and self.moves.marty and not self.moves.marty.is_moving():
-            self.moves.circletime(3)
-
-
-    def on_btn_calibrate_clicked(self):
-        pass
-
-
-    def on_btn_start_sequential_clicked(self):
-        if self.moves.marty and not self.moves.marty.is_moving():
-            self.sequential.play_dance()
-
-    def on_btn_save_sequential_clicked(self):
-        if self.moves.marty and not self.moves.marty.is_moving():
-            self.sequential.save_dance(self.sequence_file_name)
-
-    def on_btn_load_sequential_clicked(self):
-        if self.moves.marty and not self.moves.marty.is_moving():
-            self.sequential.load_dance(self.sequence_file_name)
-
 
     def keyPressEvent(self, event):
         if not self.moves.marty.is_moving():
@@ -306,3 +256,50 @@ class MainWindow(QWidget):
             elif key == Qt.Key_E:
                 print("Key E - Rotate Right")
                 self.on_btn_rotate_right_clicked()
+
+    
+    def on_btn_dominance_dance_clicked(self):
+        if self.mode == 0 and self.moves.marty and not self.moves.marty.is_moving():
+            self.moves.circletime(1)
+
+    def on_btn_circle_dance_clicked(self):
+        if self.mode == 0 and self.moves.marty and not self.moves.marty.is_moving():
+            self.moves.circletime(3)
+
+
+    def on_btn_calibrate_clicked(self):
+        pass
+
+
+    def on_btn_start_sequential_clicked(self):
+        if self.moves.marty and not self.moves.marty.is_moving():
+            self.sequential.play_dance()
+
+    def on_btn_save_sequential_clicked(self):
+        self.sequential.save_dance(self.sequence_file_name)
+
+    def on_btn_load_sequential_clicked(self):
+        self.sequential.load_dance(self.sequence_file_name)
+        self.update_icon_track()
+
+
+    def on_btn_normal_mode_clicked(self):
+        self.mode = 0
+        self.update_icon_modes()
+
+    def on_btn_sequential_mode_clicked(self):
+        self.mode = 1
+        self.update_icon_modes()
+
+    def on_btn_mouse_mode_clicked(self):
+        self.mode = 2
+        self.update_icon_modes()
+
+        # Vérifie que la fenêtre n'existe pas déjà ou a été fermée
+        if not hasattr(self, "mouse_tracking_window") or self.mouse_tracking_window is None:
+            self.mouse_tracking_window = MouseTrackingWindow(self.moves.marty, self)
+        elif not self.mouse_tracking_window.isVisible():
+            self.mouse_tracking_window.show()
+        else:
+            self.mouse_tracking_window.activateWindow()
+            self.mouse_tracking_window.raise_()
