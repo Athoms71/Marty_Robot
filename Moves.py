@@ -2,11 +2,13 @@ from martypy import Marty
 import capteur as C
 import file_management as fm
 
-
 class Moves:
     def __init__(self, marty: Marty):
         self.marty = marty
 
+    def get_marty(self):
+        return self.marty
+    
     def walkcase(self, case: int = 1, side: str = "forward"):
         """
             :param case: Nombre de cases à parcourir. Par défaut, 1.

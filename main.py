@@ -5,7 +5,7 @@ from martypy import Marty
 from MartyController import MartyController
 from MainWindow import MainWindow
 from Moves import Moves
-
+from Sequential import Sequential
 
 def main():
     # Connect to Marty
@@ -14,15 +14,17 @@ def main():
         raise Exception("Marty is not connected")
     else:
         print("Marty connected !")
+    
     # Initialize QApplication
     app = QApplication(sys.argv)
 
-    #marty.get_ready()
-    marty = None
+    marty.get_ready()
+    #marty = None
 
     moves = Moves(marty)
+    sequential = Sequential(moves)
 
-    window = MainWindow(moves)
+    window = MainWindow(moves, sequential)
     window.show()
     # Main loop
     sys.exit(app.exec_())
