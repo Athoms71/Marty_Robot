@@ -5,14 +5,14 @@ import file_management as file_management
 from MainWindow import MainWindow
 from Moves import Moves
 from Sequential import Sequential
-import capteur
+from capteur import Capteur
 from emotions import *
 from MainWindow import MainWindow
 
 
 def main():
-   # Connect to Marty
-    marty = Marty(method="wifi", locator="192.168.0.102")
+    # Connect to Marty
+    marty = Marty(method="wifi", locator="192.168.1.5")
     if not marty.is_conn_ready():
         raise Exception("Marty is not connected")
     else:
@@ -27,8 +27,9 @@ def main():
 
     moves = Moves(marty)
     sequential = Sequential(moves)
+    capteur = Capteur(marty)
 
-    window = MainWindow(moves, sequential)
+    window = MainWindow(moves, sequential, capteur)
     window.show()
     # Main loop
     sys.exit(app.exec_())
@@ -36,4 +37,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
