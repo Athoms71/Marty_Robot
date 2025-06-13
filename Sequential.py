@@ -57,30 +57,32 @@ class Sequential:
 
     def play_dance(self):
         self.robot.pos = [(int(self.dim[4]) - 1)//2, (int(self.dim[4]) - 1)//2]
-        print(self.dim)
-        print(self.list_moves)
 
         if self.dim[:3] == "SEQ":
-            for count, direction in self.list_moves:
-                count = int(count)
+            for move in self.list_moves:
+                count = int(move[0])
+                direction = move[1]
                 if direction == "U" and self.check_edges([0, -1], int(self.dim[4])):
-                    self.moves.walkcase(count)
-                elif direction == "R" and self.check_edges([1, 0], int(self.dim[4])):
-                    self.moves.sidecase(count)
-                elif direction == "L" and self.check_edges([-1, 0], int(self.dim[4])):
-                    self.moves.sidecase(count, "left")
+                    self.moves.walkcase(count, "forward")
                 elif direction == "B" and self.check_edges([0, 1], int(self.dim[4])):
                     self.moves.walkcase(count, "backward")
+                elif direction == "R" and self.check_edges([1, 0], int(self.dim[4])):
+                    self.moves.sidecase(count, "right")
+                elif direction == "L" and self.check_edges([-1, 0], int(self.dim[4])):
+                    self.moves.sidecase(count, "left")
         elif self.dim[:3] == "ABS":
-            for line in self.list_moves:
-                dy = int(line[1]) - self.robot.pos[1]
-                dx = int(line[0]) - self.robot.pos[0]
-                if dx < 0:
-                    self.moves.sidecase(-dx)
-                else:
-                    self.moves.sidecase(dx, "left")
-                if dy < 0:
-                    self.moves.walkcase(-dy)
-                else:
-                    self.moves.walkcase(dy, "backward")
-                self.moves.pos = [int(line[0]), int(line[1])]
+            for move in self.list_moves:
+                count = int(move[0])
+                direction = move[1]
+                if direction == "U" and self.check_edges([0, -count], int(self.dim[4])):
+                    self.moves.walkcase(count, "forward")
+                    self.robot.pos[1] -= count
+                elif direction == "B" and self.check_edges([0, count], int(self.dim[4])):
+                    self.moves.walkcase(count, "backward")
+                    self.robot.pos[1] += count
+                elif direction == "R" and self.check_edges([count, 0], int(self.dim[4])):
+                    self.moves.sidecase(count, "right")
+                    self.robot.pos[0] += count
+                elif direction == "L" and self.check_edges([-count, 0], int(self.dim[4])):
+                    self.moves.sidecase(count, "left")
+                    self.robot.pos[0] -= count

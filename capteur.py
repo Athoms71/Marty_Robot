@@ -23,45 +23,40 @@ class Capteur:
             print(f"Failed to read Marty distance: {e}")
 
 
-    def obstacle(self):
+    def obstacle(Marty: Marty):
         try:
-            """obstaclebool_right = bool(Marty.foot_obstacle_sensed("right"))
-            obstaclebool_left = bool(Marty.foot_obstacle_sensed("left"))"""
-            obstaclevalue_right_original = float(
-                self.marty.get_obstacle_sensor_reading("right"))
-            obstaclevalue_left_original = float(
-                self.marty.get_obstacle_sensor_reading("left"))
+            obstaclevalue_right_original = float(Marty.get_obstacle_sensor_reading("right"))
+            obstaclevalue_left_original = float(Marty.get_obstacle_sensor_reading("left"))
+        
         except Exception as e:
             print(f"Failed to read Marty obstacle: {e}")
 
-        """ print(f"valeur bool droit: {obstaclebool_right}")
-            print(f"valeur bool gauche: {obstaclebool_left}")"""
         print(f"valeur droit: {obstaclevalue_right_original}")
         print(f"valeur gauche: {obstaclevalue_left_original}")
 
 
-    def colorsensor(self, liste_couleur):
-        try:
-            Capteur.calibrate(self.marty, liste_couleur)
-            content = file_management.read_file("calibration.txt")
-            print(content)
-        except Exception as e:
-            print(f"Failed to read Marty colorsensor: {e}")
+def calibrate(Marty,couleur:str,nom_fichier:str):
+    fichier=open(nom_fichier+'.txt','a')
+    fichier.write(f"{couleur};{get_feet_colors_hex(Marty)};\n")
+    fichier.close()
 
+def rgb_to_hex(rgb):
+    """Convertit un tuple RGB en code hexadécimal."""
+    return "{:02x}{:02x}{:02x}".format(int(rgb[0]), int(rgb[1]), int(rgb[2]))
 
-
-    def calibrate(Marty,liste_couleur):
-        fichier = open("calibration.txt", "w")
-        for couleur in liste_couleur :
-            print(f"je calibre la couleur : {couleur} \nmettez la bonne couleur\n")
-            time.sleep(1)
-            print("en cours.")
-            time.sleep(1)
-            print("en cours..")
-            time.sleep(1)
-            valeur_couleur_gauche =int(Marty.get_ground_sensor_reading (str("left")))
-            valeur_couleur_droite =int(Marty.get_ground_sensor_reading (str("right")))
-            print("scannez")
-            fichier.write(f"{couleur};{valeur_couleur_gauche};{valeur_couleur_droite};\n")
-            print("c est ecrit")
-        fichier.close()
+def get_feet_colors_hex(Marty):
+    """
+    Récupère les couleurs détectées par les capteurs couleur des pieds gauche et droit de Marty au format hexadécimal,
+    sans utiliser get_color_sensor_value_by_channel ni get_color_sensor_hex.
+    
+        Tuple hex_left
+    """
+    try:
+        # Récupère les données brutes (clear, red, green, blue) pour le pied gauche
+        _, raw_left = Marty.client._get_color_sensor_raw_data("left")
+        rgb_left = (raw_left[1], raw_left[2], raw_left[3])
+        hex_left = rgb_to_hex(rgb_left)
+        return hex_left
+    except Exception as e:
+        print(f"Erreur lors de la lecture des capteurs couleur : {e}")
+        return None, None

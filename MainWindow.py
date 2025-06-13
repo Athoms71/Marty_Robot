@@ -42,6 +42,11 @@ class MainWindow(QWidget):
         self.battery_label.setStyleSheet("color: white; font-size: 16px; background-color: rgba(0, 0, 0, 100);")
         self.battery_label.setGeometry(1100, 10, 150, 30)
 
+        # Position Label
+        self.position_label = QLabel("Position: " + str(self.battery) + "%", self)
+        self.position_label.setStyleSheet("color: white; font-size: 16px; background-color: rgba(0, 0, 0, 100);")
+        self.position_label.setGeometry(1100, 60, 150, 30)
+
         # Préchargement des icônes de track
         self.track_icons = {
             'U': QPixmap(os.path.join(self.base_path, 'buttons', 'btn_forward.png')),
@@ -281,7 +286,7 @@ class MainWindow(QWidget):
     def on_btn_clear_sequential_clicked(self):
         self.sequential.remove_move()
         self.update_icon_track()
-        
+
     def on_btn_save_sequential_clicked(self):
         self.sequential.save_dance(self.sequence_file_name)
 

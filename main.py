@@ -1,39 +1,34 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMessageBox
-from martypy import Marty
-import file_management as file_management
+from PyQt5.QtWidgets import QApplication
 from MainWindow import MainWindow
 from Moves import Moves
-from Sequential import Sequential
-from capteur import Capteur
+import capteur
 from emotions import *
 from MainWindow import MainWindow
 
 
 def main():
-    # Connect to Marty
-    marty = Marty(method="wifi", locator="192.168.1.5")
-    if not marty.is_conn_ready():
-        raise Exception("Marty is not connected")
-    else:
-        print("Marty connected !")
-    
-    # Initialize QApplication
     app = QApplication(sys.argv)
- 
 
-    marty.get_ready()
-    #marty = None
+    connect_window = ConnectWindow()
+    connect_window.show()
 
-    moves = Moves(marty)
-    sequential = Sequential(moves)
-    capteur = Capteur(marty)
+    app.main_window = None
 
-    window = MainWindow(moves, sequential, capteur)
-    window.show()
-    # Main loop
+    def on_marty_connected(marty):
+        print("Optimus Prime connected")
+        marty.get_ready()
+
+        moves = Moves(marty)
+        sequential = Sequential(moves)
+        capteur = Capteur(marty)
+
+        app.main_window = MainWindow(moves, sequential, capteur)
+        app.main_window.show()
+
+    connect_window.marty_connected.connect(on_marty_connected)
+
     sys.exit(app.exec_())
-
 
 if __name__ == "__main__":
     main()
