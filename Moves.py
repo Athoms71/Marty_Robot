@@ -52,7 +52,7 @@ class Moves:
             :param side: Direction ("right" ou "left"). Par défaut, "right".
         """
         self.marty.sidestep(side=side, steps=case*7,
-                            step_length=35, move_time=1000, blocking=True)
+                            step_length=35, move_time=1000, blocking=False)
         # Mise à jour de la position
         dx, dy = self.pos
         if side == "right":
