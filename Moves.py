@@ -11,6 +11,19 @@ class Moves:
     def get_marty(self):
         return self.marty
 
+    def go_to_origin(self, dim: int):
+        dx = self.pos[0] - (dim - 1)//2
+        dy = self.pos[1] - (dim - 1)//2
+        if dx < 0:
+            self.sidecase(-dx)
+        elif dx > 0:
+            self.sidecase(dx, "left")
+        if dy < 0:
+            self.walkcase(-dy, "backward")
+        elif dy > 0:
+            self.walkcase(dy)
+        print("Le robot est actuellement au centre de la case")
+
     def walkcase(self, case: int = 1, side: str = "forward"):
         """
             :param case: Nombre de cases à parcourir. Par défaut, 1.
@@ -129,16 +142,8 @@ class Moves:
                     total_steps += 1
                 dir_index += 1
             steps += 1
+        # On sait qu'à la fin on est en bas à droite
+        self.pos = (size - 1, size - 1)
 
-    def go_to_origin(self, dim: int):
-        dx = self.pos[0] - (dim - 1)//2
-        dy = self.pos[1] - (dim - 1)//2
-        if dx < 0:
-            self.sidecase(-dx)
-        elif dx > 0:
-            self.sidecase(dx, "left")
-        if dy < 0:
-            self.walkcase(-dy, "backward")
-        elif dy > 0:
-            self.walkcase(dy)
-        print("Le robot est actuellement au centre de la case")
+        # Maintenant on peut retourner au centre
+        self.go_to_origin(size)
