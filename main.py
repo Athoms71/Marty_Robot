@@ -6,7 +6,7 @@ from MainWindow import MainWindow
 from Moves import Moves
 from Sequential import Sequential
 from capteur import Capteur
-from emotions import *
+from emotions import Emotions
 from MainWindow import MainWindow
 
 
@@ -28,6 +28,7 @@ def main():
     moves = Moves(marty)
     sequential = Sequential(moves)
     capteur = Capteur(marty)
+    emotions = Emotions(moves)
 
     window = MainWindow(moves, sequential, capteur)
     window.show()
