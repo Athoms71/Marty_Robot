@@ -4,7 +4,6 @@ import time
 import file_management as F
 
 
-
 def angry(robot: Marty):
     robot.get_ready()
     robot.disco_color("#ff0000")
@@ -35,22 +34,12 @@ def normal(robot: Marty):
 
 def wide(robot: Marty):
     robot.get_ready()
-    robot.disco_color("#4080ff")
+    robot.disco_color("#888888")
     robot.eyes("wide", 50, True)
     M.Moves.rollarms(2)
     time.sleep(0.8)
     robot.disco_off()
     robot.eyes("normal", 50, True)
-
-def dossier_emotion(robot : Marty,chemin: str):
-    liste_action=F.read_mouv(chemin)
-    for emotion in liste_action:
-        robot.disco_color(emotion[2])
-        robot.eyes(emotion[1], 50, True)
-        time.sleep(0.8)
-    robot.disco_off()
-    robot.eyes("normal", 50, True)
-
 
 
 def wiggle(robot: Marty):
@@ -60,3 +49,19 @@ def wiggle(robot: Marty):
     time.sleep(0.8)
     robot.disco_off()
     robot.eyes("normal", 50, True)
+
+
+def dossier_emotion(robot: Marty, chemin: str):
+    liste_action = F.read_mouv(chemin)
+    for emotion in liste_action:
+        robot.disco_color(emotion[2])
+        robot.eyes(emotion[1], 50, True)
+        time.sleep(0.8)
+    robot.disco_off()
+    robot.eyes("normal", 50, True)
+
+
+def set_eyes_color(robot: Marty, color: str):
+    robot.disco_color(color)
+    time.sleep(0.8)
+    robot.disco_off()
