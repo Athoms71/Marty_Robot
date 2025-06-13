@@ -17,10 +17,10 @@ class Sequential:
         if len(self.list_moves) < 28:
             self.list_moves.append(move)
 
-    def remove_move(self, index: int):
+    def remove_move(self):
         """Supprime un mouvement de list_moves à l'index spécifié."""
-        if 0 <= index < len(self.list_moves):
-            self.list_moves.pop(index)
+        if len(self.list_moves) > 0:
+            self.list_moves.pop(len(self.list_moves) - 1)
 
     def load_dance(self, file_path: str):
         """Charge le fichier .dance et stocke son contenu dans list_moves sous forme de liste 2D."""
