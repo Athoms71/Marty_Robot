@@ -30,17 +30,28 @@ class Moves:
             :param side: Direction ("forward" ou "backward"). Par défaut, "forward".
         """
         if (side == "forward"):
+<<<<<<< HEAD
             self.marty.walk(num_steps=case * 6, start_foot='auto',
                             turn=0, step_length=25, move_time=1500, blocking=True)
+=======
+            self.marty.walk(num_steps=case*7, start_foot='auto',
+                            turn=0, step_length=25, move_time=1500, blocking=None)
+>>>>>>> 4e47dacb088e164960bd81a3822e0a4865c2395d
             self.marty.walk(num_steps=1, start_foot='auto',
                             turn=0, step_length=2, move_time=1500, blocking=True)
             # Mise à jour de la position
             dx, dy = self.pos
             self.pos = (dx, dy + case)
+<<<<<<< HEAD
 
         elif (side == "backward"):
             self.marty.walk(num_steps=case * 6, start_foot='auto',
                             turn=0, step_length=-25, move_time=1500, blocking=True)
+=======
+        else:
+            self.marty.walk(num_steps=case * 7, start_foot='auto',
+                            turn=0, step_length=-25, move_time=1500, blocking=None)
+>>>>>>> 4e47dacb088e164960bd81a3822e0a4865c2395d
             self.marty.walk(num_steps=1, start_foot='auto',
                             turn=0, step_length=-2, move_time=1500, blocking=True)
             # Mise à jour de la position
@@ -52,7 +63,7 @@ class Moves:
             :param case: Nombre de cases à parcourir. Par défaut, 1.
             :param side: Direction ("right" ou "left"). Par défaut, "right".
         """
-        self.marty.sidestep(side=side, steps=case*6,
+        self.marty.sidestep(side=side, steps=case*7,
                             step_length=35, move_time=1000, blocking=True)
         # Mise à jour de la position
         dx, dy = self.pos
@@ -130,7 +141,7 @@ class Moves:
         dir_index = 0
 
         # APPEL INITIAL FONCTION CALIBRATION COULEUR
-
+        fm.create_file("fichier_couleur",2)
         # On commence au centre, donc on effectue le déplacement en spirale
         while total_steps < max_steps:
             for _ in range(2):  # 2 fois à chaque "tour" (spirale)
@@ -139,7 +150,9 @@ class Moves:
                     if total_steps >= max_steps:
                         return  # toutes les cases ont été visitées
                     getattr(self, action)(1, side)
-                    # APPEL FONCTION CALIBRATION COULEUR
+                    #APPEL FONCTION CALIBRATION COULEUR
+                    couleur=""
+                    C.calibrate(self,couleur,"fichier_couleur")
                     total_steps += 1
                 dir_index += 1
             steps += 1

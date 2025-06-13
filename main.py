@@ -2,10 +2,10 @@ import sys
 from PyQt5.QtWidgets import QApplication
 from MainWindow import MainWindow
 from Moves import Moves
-from Sequential import Sequential
-from capteur import Capteur
-from emotions import Emotions
-from ConnectWindow import ConnectWindow
+import capteur
+from emotions import *
+from MainWindow import MainWindow
+
 
 def main():
     app = QApplication(sys.argv)
