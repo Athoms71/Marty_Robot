@@ -5,7 +5,7 @@ import file_management as file_management
 from MainWindow import MainWindow
 from Moves import Moves
 from Sequential import Sequential
-import capteur
+from capteur import Capteur
 from emotions import *
 from MainWindow import MainWindow
 
@@ -27,8 +27,9 @@ def main():
 
     moves = Moves(marty)
     sequential = Sequential(moves)
+    capteur = Capteur(marty)
 
-    window = MainWindow(moves, sequential)
+    window = MainWindow(moves, sequential, capteur)
     window.show()
     # Main loop
     sys.exit(app.exec_())
