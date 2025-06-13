@@ -1,6 +1,6 @@
 from Moves import Moves
 from martypy import Marty
-
+import time
 
 class Sequential:
     def __init__(self, moves: Moves):
@@ -58,18 +58,26 @@ class Sequential:
     def play_dance(self):
         self.robot.pos = [(int(self.dim[4]) - 1)//2, (int(self.dim[4]) - 1)//2]
 
+        print(self.dim[:3])
+        print(self.list_moves)
+
         if self.dim[:3] == "SEQ":
             for move in self.list_moves:
                 count = int(move[0])
                 direction = move[1]
-                if direction == "U" and self.check_edges([0, -1], int(self.dim[4])):
+                if direction == "U" and self.check_edges([0, -count], int(self.dim[4])):
                     self.moves.walkcase(count, "forward")
-                elif direction == "B" and self.check_edges([0, 1], int(self.dim[4])):
+                elif direction == "B" and self.check_edges([0, count], int(self.dim[4])):
                     self.moves.walkcase(count, "backward")
-                elif direction == "R" and self.check_edges([1, 0], int(self.dim[4])):
+                elif direction == "R" and self.check_edges([count, 0], int(self.dim[4])):
                     self.moves.sidecase(count, "right")
-                elif direction == "L" and self.check_edges([-1, 0], int(self.dim[4])):
+                elif direction == "L" and self.check_edges([-count, 0], int(self.dim[4])):
                     self.moves.sidecase(count, "left")
+
+                # Attente tant que Marty est occupé
+                while self.robot.is_moving():
+                    time.sleep(0.1)
+
         elif self.dim[:3] == "ABS":
             for move in self.list_moves:
                 count = int(move[0])
@@ -86,3 +94,6 @@ class Sequential:
                 elif direction == "L" and self.check_edges([-count, 0], int(self.dim[4])):
                     self.moves.sidecase(count, "left")
                     self.robot.pos[0] -= count
+
+                while self.robot.is_moving():
+                    time.sleep(0.1)

@@ -7,7 +7,6 @@ class Capteur:
         self.marty = marty
 
     def get_battery(self):
-        print("Marty's battery level:")
         try:
             return int(self.marty.get_battery_remaining())
         

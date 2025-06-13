@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QWidget, QPushButton, QGridLayout, QLabel
 from PyQt5.QtGui import QIcon, QPixmap, QPalette, QBrush
-from PyQt5.QtCore import Qt, QRect
+from PyQt5.QtCore import Qt, QTimer
 import os
 from MouseTrackingWindow import MouseTrackingWindow
 
@@ -17,8 +17,6 @@ class MainWindow(QWidget):
 
         self.sequence_file_name = "sequence.dance"
         self.mode = 0   # 0 = normal, 1 = list mode, 2 = mouse mode
-        self.battery = capteur.get_battery()
-
         self.base_path = os.path.dirname(__file__)
 
         # Background Image
@@ -38,14 +36,20 @@ class MainWindow(QWidget):
         self.label.setGeometry(450, 450, 810, 255)
 
         # Battery Label
-        self.battery_label = QLabel("Battery: " + str(self.battery) + "%", self)
+        self.battery_label = QLabel(self)
         self.battery_label.setStyleSheet("color: white; font-size: 16px; background-color: rgba(0, 0, 0, 100);")
         self.battery_label.setGeometry(1100, 10, 150, 30)
 
         # Position Label
-        self.position_label = QLabel("Position: " + str(self.battery) + "%", self)
+        self.position_label = QLabel(self)
         self.position_label.setStyleSheet("color: white; font-size: 16px; background-color: rgba(0, 0, 0, 100);")
-        self.position_label.setGeometry(1100, 60, 150, 30)
+        self.position_label.setGeometry(1100, 50, 150, 30)
+
+        # Timer
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.update_battery)
+        self.timer.timeout.connect(self.update_position)
+        self.timer.start(500)
 
         # Préchargement des icônes de track
         self.track_icons = {
@@ -201,6 +205,12 @@ class MainWindow(QWidget):
                     label.show()
                     self.track_labels.append(label)
                     nb += 1
+
+    def update_battery(self):
+        self.battery_label.setText("Battery: " + str(self.capteur.get_battery()) + "%")
+
+    def update_position(self):
+        self.position_label.setText("Position: " + str(self.moves.pos))
 
 
     def on_btn_forward_clicked(self):
