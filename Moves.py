@@ -101,7 +101,7 @@ class Moves:
         dir_index = 0
 
         # APPEL INITIAL FONCTION CALIBRATION COULEUR
-
+        fm.create_file("fichier_couleur",2)
         # On commence au centre, donc on effectue le déplacement en spirale
         while total_steps < max_steps:
             for _ in range(2):  # 2 fois à chaque "tour" (spirale)
@@ -111,6 +111,8 @@ class Moves:
                         return  # toutes les cases ont été visitées
                     getattr(self, action)(1, side)
                     #APPEL FONCTION CALIBRATION COULEUR
+                    couleur=""
+                    C.calibrate(self,couleur,"fichier_couleur")
                     total_steps += 1
                 dir_index += 1
             steps += 1
