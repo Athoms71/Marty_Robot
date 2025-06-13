@@ -5,7 +5,9 @@ from Moves import Moves
 import capteur
 from emotions import *
 from MainWindow import MainWindow
-
+from ConnectWindow import ConnectWindow
+from Sequential import Sequential
+from capteur import Capteur
 
 def main():
     app = QApplication(sys.argv)

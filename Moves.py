@@ -30,28 +30,16 @@ class Moves:
             :param side: Direction ("forward" ou "backward"). Par défaut, "forward".
         """
         if (side == "forward"):
-<<<<<<< HEAD
-            self.marty.walk(num_steps=case * 6, start_foot='auto',
-                            turn=0, step_length=25, move_time=1500, blocking=True)
-=======
             self.marty.walk(num_steps=case*7, start_foot='auto',
                             turn=0, step_length=25, move_time=1500, blocking=None)
->>>>>>> 4e47dacb088e164960bd81a3822e0a4865c2395d
             self.marty.walk(num_steps=1, start_foot='auto',
                             turn=0, step_length=2, move_time=1500, blocking=True)
             # Mise à jour de la position
             dx, dy = self.pos
             self.pos = (dx, dy + case)
-<<<<<<< HEAD
-
-        elif (side == "backward"):
-            self.marty.walk(num_steps=case * 6, start_foot='auto',
-                            turn=0, step_length=-25, move_time=1500, blocking=True)
-=======
         else:
             self.marty.walk(num_steps=case * 7, start_foot='auto',
                             turn=0, step_length=-25, move_time=1500, blocking=None)
->>>>>>> 4e47dacb088e164960bd81a3822e0a4865c2395d
             self.marty.walk(num_steps=1, start_foot='auto',
                             turn=0, step_length=-2, move_time=1500, blocking=True)
             # Mise à jour de la position
