@@ -56,9 +56,7 @@ class Sequential:
         return False
 
     def play_dance(self):
-        self.robot.pos = [(int(self.dim[4]) - 1)//2, (int(self.dim[4]) - 1)//2]
-        print(self.dim)
-        print(self.list_moves)
+        self.moves.pos = [(int(self.dim[4]) - 1)//2, (int(self.dim[4]) - 1)//2]
 
         if self.dim[:3] == "SEQ":
             for count, direction in self.list_moves:
@@ -73,14 +71,14 @@ class Sequential:
                     self.moves.walkcase(count, "backward")
         elif self.dim[:3] == "ABS":
             for line in self.list_moves:
-                dy = int(line[1]) - self.robot.pos[1]
-                dx = int(line[0]) - self.robot.pos[0]
+                dy = int(line[1]) - self.moves.pos[1]
+                dx = int(line[0]) - self.moves.pos[0]
                 if dx < 0:
                     self.moves.sidecase(-dx)
-                else:
+                elif dx > 0:
                     self.moves.sidecase(dx, "left")
                 if dy < 0:
-                    self.moves.walkcase(-dy)
-                else:
-                    self.moves.walkcase(dy, "backward")
+                    self.moves.walkcase(-dy, "backward")
+                elif dy > 0:
+                    self.moves.walkcase(dy)
                 self.moves.pos = [int(line[0]), int(line[1])]
