@@ -2,11 +2,11 @@ from martypy import Marty
 import time
 import file_management as file_management
 
-class Capteur:
-    def __init__(self, marty: Marty):
+
+def __init__(self, marty: Marty):
         self.marty = marty
 
-    def get_battery(self):
+def get_battery(self):
         print("Marty's battery level:")
         try:
             return int(self.marty.get_battery_remaining())
@@ -15,7 +15,7 @@ class Capteur:
             print(f"Failed to read Marty batttery lvl: {e}")
 
 
-    def get_distance(self):
+def get_distance(self):
         print("Marty's distance:")
         try:
             return float(self.marty.get_distance_sensor())
