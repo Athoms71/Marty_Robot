@@ -2,28 +2,49 @@ from martypy import Marty
 import capteur as C
 import file_management as fm
 
+
 class Moves:
     def __init__(self, marty: Marty):
         self.marty = marty
+        self.pos = [1, 0]
 
     def get_marty(self):
         return self.marty
-    
+
+    def go_to_origin(self, dim: int):
+        dx = self.pos[0] - (dim - 1)//2
+        dy = self.pos[1] - (dim - 1)//2
+        if dx < 0:
+            self.sidecase(-dx)
+        elif dx > 0:
+            self.sidecase(dx, "left")
+        if dy < 0:
+            self.walkcase(-dy, "backward")
+        elif dy > 0:
+            self.walkcase(dy)
+        print("Le robot est actuellement au centre de la case")
+
     def walkcase(self, case: int = 1, side: str = "forward"):
         """
             :param case: Nombre de cases à parcourir. Par défaut, 1.
             :param side: Direction ("forward" ou "backward"). Par défaut, "forward".
         """
-        if (side == "forward"):
+        if side == "forward":
             self.marty.walk(num_steps=case*6, start_foot='auto',
                             turn=0, step_length=25, move_time=1500, blocking=None)
             self.marty.walk(num_steps=1, start_foot='auto',
                             turn=0, step_length=2, move_time=1500, blocking=None)
-        else:
+            # Mise à jour de la position
+            dx, dy = self.pos
+            self.pos = (dx, dy + case)
+        elif side == "backward":
             self.marty.walk(num_steps=case * 6, start_foot='auto',
                             turn=0, step_length=-25, move_time=1500, blocking=None)
             self.marty.walk(num_steps=1, start_foot='auto',
                             turn=0, step_length=-2, move_time=1500, blocking=None)
+            # Mise à jour de la position
+            dx, dy = self.pos
+            self.pos = (dx, dy - case)
 
     def sidecase(self, case: int = 1, side: str = "right"):
         """
@@ -32,6 +53,12 @@ class Moves:
         """
         self.marty.sidestep(side=side, steps=case*6,
                             step_length=35, move_time=1000, blocking=True)
+        # Mise à jour de la position
+        dx, dy = self.pos
+        if side == "right":
+            self.pos = (dx + case, dy)
+        else:  # "left"
+            self.pos = (dx - case, dy)
 
     def circletime(self, time: int = 1):
         """
@@ -84,7 +111,8 @@ class Moves:
 
     def calibration_path(self, size: int):
         if size % 2 == 0 or size < 1:
-            raise ValueError("La taille de la grille doit être un nombre impair et >= 1")
+            raise ValueError(
+                "La taille de la grille doit être un nombre impair et >= 1")
 
         steps = 1  # nombre de cases à parcourir dans une direction
         total_steps = 1  # pour compter le nombre de cases parcourues
@@ -116,3 +144,8 @@ class Moves:
                     total_steps += 1
                 dir_index += 1
             steps += 1
+        # On sait qu'à la fin on est en bas à droite
+        self.pos = (size - 1, size - 1)
+
+        # Maintenant on peut retourner au centre
+        self.go_to_origin(size)

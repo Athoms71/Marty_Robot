@@ -1,26 +1,26 @@
 from martypy import Marty
-import mmap
 import time
 import file_management as file_management
 
-def battery(Marty):
-    print("Marty's battery level:")
-    try:
-        battery = float(Marty.get_battery_remaining())
-        return battery
-    
-    except Exception as e:
-        print(f"Failed to read Marty batttery lvl: {e}")
+class Capteur:
+    def __init__(self, marty: Marty):
+        self.marty = marty
+
+    def get_battery(self):
+        print("Marty's battery level:")
+        try:
+            return int(self.marty.get_battery_remaining())
+        
+        except Exception as e:
+            print(f"Failed to read Marty batttery lvl: {e}")
 
 
-def distance(Marty: Marty):
-    print("Marty's distance:")
-    try:
-        distance = float(Marty.get_distance_sensor())
-        return distance
-    
-    except Exception as e:
-        print(f"Failed to read Marty distance: {e}")
+    def get_distance(self):
+        print("Marty's distance:")
+        try:
+            return float(self.marty.get_distance_sensor())
+        except Exception as e:
+            print(f"Failed to read Marty distance: {e}")
 
 
 def obstacle(Marty: Marty):
