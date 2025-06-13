@@ -1,7 +1,7 @@
 from martypy import Marty
 import capteur as C
 import file_management as fm
-from sequential import go_to_origin
+import Sequential
 
 
 class Moves:
@@ -135,4 +135,4 @@ class Moves:
         self.pos = (size - 1, size - 1)
 
         # Maintenant on peut retourner au centre
-        go_to_origin()
+        Sequential.go_to_origin()
