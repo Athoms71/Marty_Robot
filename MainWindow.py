@@ -81,6 +81,7 @@ class MainWindow(QWidget):
         btn_start_sequencial = make_button('btn_start_sequential.png', 80, self.on_btn_start_sequential_clicked)
         btn_save_sequencial = make_button('btn_save_sequential.png', 80, self.on_btn_save_sequential_clicked)
         btn_load_sequencial = make_button('btn_load_sequential.png', 80, self.on_btn_load_sequential_clicked)
+        btn_clear_sequencial = make_button('btn_clear_sequential.png', 80, self.on_btn_clear_sequential_clicked)
 
         # Boutons de mode stockés comme attributs
         btn_normal_mode = make_button('btn_normal_mode.png', 100, self.on_btn_normal_mode_clicked)
@@ -114,8 +115,9 @@ class MainWindow(QWidget):
 
         grid_sequential = QGridLayout()
         grid_sequential.addWidget(btn_start_sequencial, 1, 0)
-        grid_sequential.addWidget(btn_save_sequencial, 0, 1)
-        grid_sequential.addWidget(btn_load_sequencial, 0, 2)
+        grid_sequential.addWidget(btn_clear_sequencial, 0, 1)
+        grid_sequential.addWidget(btn_save_sequencial, 0, 2)
+        grid_sequential.addWidget(btn_load_sequencial, 0, 3)
 
         grid_modes = QGridLayout()
         grid_modes.addWidget(btn_normal_mode, 0, 0)
@@ -137,7 +139,7 @@ class MainWindow(QWidget):
 
         container_sequential = QWidget(self)
         container_sequential.setLayout(grid_sequential)
-        container_sequential.setGeometry(420, 353, 300, 200)
+        container_sequential.setGeometry(420, 353, 400, 200)
 
         container_modes = QWidget(self)
         container_modes.setLayout(grid_modes)
@@ -276,6 +278,10 @@ class MainWindow(QWidget):
         if self.moves.marty and not self.moves.marty.is_moving():
             self.sequential.play_dance()
 
+    def on_btn_clear_sequential_clicked(self):
+        self.sequential.remove_move()
+        self.update_icon_track()
+        
     def on_btn_save_sequential_clicked(self):
         self.sequential.save_dance(self.sequence_file_name)
 
