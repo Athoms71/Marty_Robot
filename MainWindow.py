@@ -5,18 +5,19 @@ import os
 from MouseTrackingWindow import MouseTrackingWindow
 
 class MainWindow(QWidget):
-    def __init__(self, moves, sequential):
+    def __init__(self, moves, sequential, capteur):
         super().__init__()
         self.setWindowTitle("Optimus Prime")
         self.resize(1280, 720)
 
-        self.sequence_file_name = "sequence.dance"
-        self.mode = 0   # 0 = normal, 1 = list mode, 2 = mouse mode
-        self.battery = 10
-
         self.moves = moves
         self.sequential = sequential
+        self.capteur = capteur
         self.mouse_tracking_window = None
+
+        self.sequence_file_name = "sequence.dance"
+        self.mode = 0   # 0 = normal, 1 = list mode, 2 = mouse mode
+        self.battery = capteur.get_battery()
 
         self.base_path = os.path.dirname(__file__)
 
