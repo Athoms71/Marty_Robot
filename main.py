@@ -12,7 +12,7 @@ from MainWindow import MainWindow
 
 def main():
     # Connect to Marty
-    marty = Marty(method="wifi", locator="192.168.1.5")
+    marty = Marty(method="wifi", locator="192.168.1.2")
     if not marty.is_conn_ready():
         raise Exception("Marty is not connected")
     else:
