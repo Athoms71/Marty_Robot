@@ -2,13 +2,15 @@ from martypy import Marty
 import capteur as C
 import file_management as fm
 
+
 class Moves:
     def __init__(self, marty: Marty):
         self.marty = marty
+        self.pos = [1, 1]
 
     def get_marty(self):
         return self.marty
-    
+
     def walkcase(self, case: int = 1, side: str = "forward"):
         """
             :param case: Nombre de cases à parcourir. Par défaut, 1.
@@ -84,7 +86,8 @@ class Moves:
 
     def calibration_path(self, size: int):
         if size % 2 == 0 or size < 1:
-            raise ValueError("La taille de la grille doit être un nombre impair et >= 1")
+            raise ValueError(
+                "La taille de la grille doit être un nombre impair et >= 1")
 
         steps = 1  # nombre de cases à parcourir dans une direction
         total_steps = 1  # pour compter le nombre de cases parcourues
@@ -110,7 +113,7 @@ class Moves:
                     if total_steps >= max_steps:
                         return  # toutes les cases ont été visitées
                     getattr(self, action)(1, side)
-                    #APPEL FONCTION CALIBRATION COULEUR
+                    # APPEL FONCTION CALIBRATION COULEUR
                     total_steps += 1
                 dir_index += 1
             steps += 1
