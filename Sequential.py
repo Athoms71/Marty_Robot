@@ -1,5 +1,7 @@
+from Moves import Moves
+
 class Sequential:
-    def __init__(self, moves):
+    def __init__(self, moves: Moves):
         self.moves = moves
         self.robot = moves.get_marty()
         self.list_moves = []
@@ -17,7 +19,6 @@ class Sequential:
         """Supprime un mouvement de list_moves à l'index spécifié."""
         if 0 <= index < len(self.list_moves):
             self.list_moves.pop(index)
-
 
     def load_dance(self, file_path: str):
         """Charge le fichier .dance et stocke son contenu dans list_moves sous forme de liste 2D."""
@@ -46,8 +47,8 @@ class Sequential:
             print("Le fichier est introuvable.")
 
     def check_edges(self, deplacement: list[int], dim: int):
-        pos_x = self.robot.pos[0] + deplacement[0]
-        pos_y = self.robot.pos[1] + deplacement[1]
+        pos_x = self.moves.pos[0] + deplacement[0]
+        pos_y = self.moves.pos[1] + deplacement[1]
         if (pos_x >= 0 and pos_x < dim) and (pos_y >= 0 and pos_y < dim):
             return True
         return False
@@ -80,11 +81,11 @@ class Sequential:
                     self.moves.walkcase(-dy)
                 else:
                     self.moves.walkcase(dy, "backward")
-                self.robot.pos = [int(line[0]), int(line[1])]
+                self.moves.pos = [int(line[0]), int(line[1])]
 
     def go_to_origin(self, dim: int):
-        dx = self.robot.pos[0] - (dim - 1)//2
-        dy = self.robot.pos[1] - (dim - 1)//2
+        dx = self.moves.pos[0] - (dim - 1)//2
+        dy = self.moves.pos[1] - (dim - 1)//2
         if dx < 0:
             self.moves.sidecase(-dx)
         else:
