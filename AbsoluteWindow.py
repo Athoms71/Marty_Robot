@@ -9,6 +9,7 @@ class AbsoluteWindow(QWidget):
     def __init__(self, dim: int):
         super().__init__()
         self.dim = dim
+        self.list_actions = []
         self.setWindowTitle("Construction du parcours en absolu")
         self.setFixedSize(150*self.dim, 130*self.dim)
 
@@ -31,25 +32,26 @@ class AbsoluteWindow(QWidget):
         self.show()
 
     def handle_cell_click(self, row: int, col: int):
-        ACTIONS.append(f"{row}{col}")
+        self.list_actions.append(f"{row}{col}")
 
     def save_abs(self, file_path: str):
         if file_path.endswith(".dance"):
             with open(file_path, "w") as fichier:
                 fichier.write(f"ABS {self.dim}\n")
-                for move in ACTIONS:
+                for move in self.list_actions:
                     fichier.write(f"{move}\n")
             print("Fichier enregistré avec succès.")
         else:
             print("Le fichier est introuvable.")
 
     def closeEvent(self, event):
-        self.save_abs(f"{randint(0, 1000)}_auto.dance")
-        self.close()
+        if not event:
+            if len(self.list_actions) > 0:
+                self.save_abs(f"{randint(0, 1000)}_auto.dance")
+            self.close()
 
 
 app = QApplication(sys.argv)
-ACTIONS = []
 window = AbsoluteWindow(5)
 window.show()
 sys.exit(app.exec_())
