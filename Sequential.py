@@ -2,6 +2,7 @@ from Moves import Moves
 from martypy import Marty
 import time
 
+
 class Sequential:
     def __init__(self, moves: Moves):
         self.moves = moves
@@ -56,10 +57,7 @@ class Sequential:
         return False
 
     def play_dance(self):
-        self.robot.pos = [(int(self.dim[4]) - 1)//2, (int(self.dim[4]) - 1)//2]
-
-        print(self.dim[:3])
-        print(self.list_moves)
+        self.moves.pos = [(int(self.dim[4]) - 1)//2, (int(self.dim[4]) - 1)//2]
 
         if self.dim[:3] == "SEQ":
             for move in self.list_moves:
