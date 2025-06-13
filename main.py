@@ -11,7 +11,7 @@ from MainWindow import MainWindow
 
 def main():
    # Connect to Marty
-    marty = Marty(method="wifi", locator="192.168.1.5")
+    marty = Marty(method="wifi", locator="192.168.1.2")
     if not marty.is_conn_ready():
         raise Exception("Marty is not connected")
     else:
@@ -20,7 +20,12 @@ def main():
     # Initialize QApplication
     app = QApplication(sys.argv)
 
-    capteur.get_feet_colors_hex(marty)
+    file_management.create_file("robert",2)
+    capteur.calibrate(marty,"bleu","robert")
+    capteur.calibrate(marty,"rose","robert")
+    print(file_management.read_file("robert"))
+
+
     marty.get_ready()
     moves = Moves(marty)
     dossier_emotion(marty,"./real.feels")

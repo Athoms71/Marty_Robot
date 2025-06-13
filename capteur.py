@@ -18,42 +18,28 @@ def distance(Marty: Marty):
     try:
         distance = float(Marty.get_distance_sensor())
         return distance
+    
     except Exception as e:
         print(f"Failed to read Marty distance: {e}")
 
 
 def obstacle(Marty: Marty):
     try:
-        """obstaclebool_right = bool(Marty.foot_obstacle_sensed("right"))
-        obstaclebool_left = bool(Marty.foot_obstacle_sensed("left"))"""
-        obstaclevalue_right_original = float(
-            Marty.get_obstacle_sensor_reading("right"))
-        obstaclevalue_left_original = float(
-            Marty.get_obstacle_sensor_reading("left"))
+        obstaclevalue_right_original = float(Marty.get_obstacle_sensor_reading("right"))
+        obstaclevalue_left_original = float(Marty.get_obstacle_sensor_reading("left"))
+    
     except Exception as e:
         print(f"Failed to read Marty obstacle: {e}")
 
-    """ print(f"valeur bool droit: {obstaclebool_right}")
-        print(f"valeur bool gauche: {obstaclebool_left}")"""
     print(f"valeur droit: {obstaclevalue_right_original}")
     print(f"valeur gauche: {obstaclevalue_left_original}")
 
 
-def  colorsensor(Marty,liste_couleur):
-    try:
-        calibrate(Marty,liste_couleur)
-        content = file_management.read_file("calibration.txt")
-        print(content)
-    except Exception as e:
-        print(f"Failed to read Marty colorsensor: {e}")
+def calibrate(Marty,couleur:str,nom_fichier:str):
+    fichier=open(nom_fichier+'.txt','a')
+    fichier.write(f"{couleur};{get_feet_colors_hex(Marty)};\n")
+    fichier.close()
 
-##https://github.com/robotical/martypy/blob/master/martypy/ClientMV2.py
-#je dois refaire le programme en mettant les donnée en hexa ou rgb + séparer la création du fichier et l enregistrement ne pas oublier de demander les couleurs a chaque fois 
-#dans sequencial nous pouvons savoir le nombre de cases qui reste ou total ou qui sont parcourut   
-def calibrate(Marty,liste_couleur):
-    Marty._index_data_color_ir("left")
-    Marty._index_data_color_ir("right")
-    
 def rgb_to_hex(rgb):
     """Convertit un tuple RGB en code hexadécimal."""
     return "{:02x}{:02x}{:02x}".format(int(rgb[0]), int(rgb[1]), int(rgb[2]))
@@ -66,11 +52,10 @@ def get_feet_colors_hex(Marty):
         Tuple hex_left
     """
     try:
-        # Récupère les données brutes (clear, red, green, blue) pour chaque pied
+        # Récupère les données brutes (clear, red, green, blue) pour le pied gauche
         _, raw_left = Marty.client._get_color_sensor_raw_data("left")
         rgb_left = (raw_left[1], raw_left[2], raw_left[3])
         hex_left = rgb_to_hex(rgb_left)
-        print(f"Pied gauche (hex): {hex_left}")
         return hex_left
     except Exception as e:
         print(f"Erreur lors de la lecture des capteurs couleur : {e}")
