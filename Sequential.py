@@ -64,24 +64,24 @@ class Sequential:
                 direction = move[1]
                 if direction == "U" and self.check_edges([0, -1], int(self.dim[4])):
                     self.moves.walkcase(count, "forward")
-                elif direction == "R" and self.check_edges([1, 0], int(self.dim[4])):
-                    self.moves.sidecase(count, "backward")
-                elif direction == "L" and self.check_edges([-1, 0], int(self.dim[4])):
-                    self.moves.sidecase(count, "left")
                 elif direction == "B" and self.check_edges([0, 1], int(self.dim[4])):
                     self.moves.walkcase(count, "backward")
+                elif direction == "R" and self.check_edges([1, 0], int(self.dim[4])):
+                    self.moves.sidecase(count, "right")
+                elif direction == "L" and self.check_edges([-1, 0], int(self.dim[4])):
+                    self.moves.sidecase(count, "left")
         elif self.dim[:3] == "ABS":
             for move in self.list_moves:
                 count = int(move[0])
                 direction = move[1]
                 if direction == "U" and self.check_edges([0, -count], int(self.dim[4])):
-                    self.moves.walkcase(count)
+                    self.moves.walkcase(count, "forward")
                     self.robot.pos[1] -= count
                 elif direction == "B" and self.check_edges([0, count], int(self.dim[4])):
                     self.moves.walkcase(count, "backward")
                     self.robot.pos[1] += count
                 elif direction == "R" and self.check_edges([count, 0], int(self.dim[4])):
-                    self.moves.sidecase(count)
+                    self.moves.sidecase(count, "right")
                     self.robot.pos[0] += count
                 elif direction == "L" and self.check_edges([-count, 0], int(self.dim[4])):
                     self.moves.sidecase(count, "left")
