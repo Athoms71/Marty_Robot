@@ -1,13 +1,13 @@
 from martypy import Marty
 import capteur as C
 import file_management as fm
-from sequential import go_to_origin
+import Sequential
 
 
 class Moves:
     def __init__(self, marty: Marty):
         self.marty = marty
-        self.pos = [1, 1]
+        self.pos = [0, 1]
 
     def get_marty(self):
         return self.marty
@@ -131,8 +131,15 @@ class Moves:
                 dir_index += 1
             steps += 1
 
-        # On sait qu'à la fin on est en bas à droite
-        self.pos = (size - 1, size - 1)
-
-        # Maintenant on peut retourner au centre
-        go_to_origin()
+    def go_to_origin(self, dim: int):
+        dx = self.pos[0] - (dim - 1)//2
+        dy = self.pos[1] - (dim - 1)//2
+        if dx < 0:
+            self.sidecase(-dx)
+        else:
+            self.sidecase(dx, "left")
+        if dy < 0:
+            self.walkcase(-dy, "backward")
+        else:
+            self.walkcase(dy)
+        print("Le robot est actuellement au centre de la case")

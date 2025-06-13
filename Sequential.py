@@ -1,4 +1,6 @@
 from Moves import Moves
+from martypy import Marty
+
 
 class Sequential:
     def __init__(self, moves: Moves):
@@ -82,16 +84,3 @@ class Sequential:
                 else:
                     self.moves.walkcase(dy, "backward")
                 self.moves.pos = [int(line[0]), int(line[1])]
-
-    def go_to_origin(self, dim: int):
-        dx = self.moves.pos[0] - (dim - 1)//2
-        dy = self.moves.pos[1] - (dim - 1)//2
-        if dx < 0:
-            self.moves.sidecase(-dx)
-        else:
-            self.moves.sidecase(dx, "left")
-        if dy < 0:
-            self.moves.walkcase(-dy)
-        else:
-            self.moves.walkcase(dy, "backward")
-        print("Le robot est actuellement au centre de la case")
