@@ -2,11 +2,11 @@ from martypy import Marty
 import time
 import file_management as file_management
 
-
-def __init__(self, marty: Marty):
+class Capteur:
+    def __init__(self, marty: Marty):
         self.marty = marty
 
-def get_battery(self):
+    def get_battery(self):
         print("Marty's battery level:")
         try:
             return int(self.marty.get_battery_remaining())
@@ -15,7 +15,7 @@ def get_battery(self):
             print(f"Failed to read Marty batttery lvl: {e}")
 
 
-def get_distance(self):
+    def get_distance(self):
         print("Marty's distance:")
         try:
             return float(self.marty.get_distance_sensor())
@@ -23,16 +23,16 @@ def get_distance(self):
             print(f"Failed to read Marty distance: {e}")
 
 
-def obstacle(Marty: Marty):
-    try:
-        obstaclevalue_right_original = float(Marty.get_obstacle_sensor_reading("right"))
-        obstaclevalue_left_original = float(Marty.get_obstacle_sensor_reading("left"))
-    
-    except Exception as e:
-        print(f"Failed to read Marty obstacle: {e}")
+    def obstacle(Marty: Marty):
+        try:
+            obstaclevalue_right_original = float(Marty.get_obstacle_sensor_reading("right"))
+            obstaclevalue_left_original = float(Marty.get_obstacle_sensor_reading("left"))
+        
+        except Exception as e:
+            print(f"Failed to read Marty obstacle: {e}")
 
-    print(f"valeur droit: {obstaclevalue_right_original}")
-    print(f"valeur gauche: {obstaclevalue_left_original}")
+        print(f"valeur droit: {obstaclevalue_right_original}")
+        print(f"valeur gauche: {obstaclevalue_left_original}")
 
 
 def calibrate(Marty,couleur:str,nom_fichier:str):
