@@ -1,13 +1,12 @@
 from martypy import Marty
 import capteur as C
 import file_management as fm
-import Sequential
 
 
 class Moves:
     def __init__(self, marty: Marty):
         self.marty = marty
-        self.pos = [0, 1]
+        self.pos = [1, 0]
 
     def get_marty(self):
         return self.marty
@@ -136,10 +135,10 @@ class Moves:
         dy = self.pos[1] - (dim - 1)//2
         if dx < 0:
             self.sidecase(-dx)
-        else:
+        elif dx > 0:
             self.sidecase(dx, "left")
         if dy < 0:
             self.walkcase(-dy, "backward")
-        else:
+        elif dy > 0:
             self.walkcase(dy)
         print("Le robot est actuellement au centre de la case")
