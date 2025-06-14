@@ -1,12 +1,10 @@
-from Moves import Moves
 import time
 import file_management as F
-
+from martypy import Marty
 
 class Emotions:
-    def __init__(self, moves: Moves):
-        self.moves = moves
-        self.robot = moves.get_marty()
+    def __init__(self, marty: Marty):
+        self.robot = marty
 
     def angry(self):
         self.robot.get_ready()

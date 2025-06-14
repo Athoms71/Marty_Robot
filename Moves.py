@@ -1,12 +1,14 @@
 from martypy import Marty
 import capteur as C
 import file_management as fm
+from emotions import Emotions
 import time
 
 class Moves:
     def __init__(self, marty: Marty):
         self.marty = marty
         self.pos = [1, 0]
+        self.emotions = Emotions(marty)
 
     def get_marty(self):
         return self.marty
@@ -23,6 +25,47 @@ class Moves:
         elif dy > 0:
             self.walkcase(dy)
         print("Le robot est actuellement au centre de la case")
+
+    def react_after_move(self):
+        """
+        Réagit après un mouvement en fonction de la couleur détectée sous les pieds du robot.
+        """
+        # Lecture de la couleur sous le robot
+        hexa = C.get_feet_colors_hex(self.get_marty())
+        if hexa is None:
+            print("Erreur : impossible de lire la couleur sous les pieds.")
+            return
+
+        # Recherche de la couleur approchée via robert.txt
+        couleur = C.get_color_from_hexa(hexa)
+        if couleur is None:
+            print(f"Aucune correspondance trouvée pour la couleur détectée : {hexa}")
+            return
+
+        # Lecture du fichier real.feels pour trouver l'émotion associée
+        try:
+            emotions_table = fm.read_file("real.feels")
+        except:
+            print("Erreur : impossible de lire le fichier real.feels.")
+            return
+
+        # Recherche de l'émotion associée à la couleur
+        emotion_to_call = None
+        for line in emotions_table:
+            color_file, emotion, hexa_code = line
+            if color_file.lower() == couleur.lower():
+                emotion_to_call = emotion
+                break
+
+        if emotion_to_call is None:
+            print(f"Aucune émotion définie pour la couleur {couleur}")
+            return
+
+        # Appel dynamique de l'émotion sur l'objet Emotions
+        if hasattr(self.emotions, emotion_to_call):
+            getattr(self.emotions, emotion_to_call)()
+        else:
+            print(f"L'émotion n'existe pas")
 
     def walkcase(self, case: int = 1, side: str = "forward"):
         """
@@ -45,6 +88,7 @@ class Moves:
             # Mise à jour de la position
             dx, dy = self.pos
             self.pos = (dx, dy - case)
+        self.react_after_move()  # Appelle l'émotion
 
     def sidecase(self, case: int = 1, side: str = "right"):
         """
@@ -59,6 +103,7 @@ class Moves:
             self.pos = (dx + case, dy)
         else:  # "left"
             self.pos = (dx - case, dy)
+        self.react_after_move()  # Appelle l'émotion
 
     def circletime(self, time: int = 1):
         """
