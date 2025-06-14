@@ -43,6 +43,31 @@ def rgb_to_hex(rgb):
     """Convertit un tuple RGB en code hexadécimal."""
     return "{:02x}{:02x}{:02x}".format(int(rgb[0]), int(rgb[1]), int(rgb[2]))
 
+def hexa_to_rgb(hexa: str):
+    hexa = hexa.lstrip('#')
+    return tuple(int(hexa[i:i+2], 16) for i in (0, 2, 4))
+
+def get_color_from_hexa(hexa: str):
+    try:
+        colours = file_management.read_file("robert")
+    except:
+        return None
+
+    target_rgb = hexa_to_rgb(hexa)
+
+    min_distance = float('inf')
+    closest_color = None
+
+    for nom_couleur, hexa_ref in colours:
+        rgb_ref = hexa_to_rgb(hexa_ref)
+        distance = sum((a - b) ** 2 for a, b in zip(target_rgb, rgb_ref))  # distance euclidienne simplifiée
+
+        if distance < min_distance:
+            min_distance = distance
+            closest_color = nom_couleur
+
+    return closest_color
+
 def get_feet_colors_hex(Marty):
     """
     Récupère les couleurs détectées par les capteurs couleur des pieds gauche et droit de Marty au format hexadécimal,
