@@ -44,24 +44,35 @@ def rgb_to_hex(rgb):
     return "{:02x}{:02x}{:02x}".format(int(rgb[0]), int(rgb[1]), int(rgb[2]))
 
 def hexa_to_rgb(hexa: str):
-    hexa = hexa.lstrip('#')
+    """
+    Convertit une couleur hexadécimale en tuple RGB.
+    """
     return tuple(int(hexa[i:i+2], 16) for i in (0, 2, 4))
 
 def get_color_from_hexa(hexa: str):
+    """
+    Retourne le nom de la couleur la plus proche dans 'robert.txt'.
+    :param hexa: Couleur hexadécimale à comparer.
+    """
     try:
+        # Lecture du fichier robert.txt contenant les couples (nom_couleur;code_hex)
         colours = file_management.read_file("robert")
     except:
         return None
 
-    target_rgb = hexa_to_rgb(hexa)
+    target_rgb = hexa_to_rgb(hexa) # Conversion de la couleur cible en RGB
 
-    min_distance = float('inf')
+    min_distance = float('inf') # Distance minimale initiale infinie
     closest_color = None
 
+    # Parcours de toutes les couleurs du fichier
     for nom_couleur, hexa_ref in colours:
         rgb_ref = hexa_to_rgb(hexa_ref)
+
+        # Calcul de la distance euclidienne simplifiée
         distance = sum((a - b) ** 2 for a, b in zip(target_rgb, rgb_ref))  # distance euclidienne simplifiée
 
+        # Si une couleur est plus proche, on l’enregistre
         if distance < min_distance:
             min_distance = distance
             closest_color = nom_couleur

@@ -69,9 +69,10 @@ class Moves:
 
     def walkcase(self, case: int = 1, side: str = "forward", emotion: bool = True):
         """
-            :param case: Nombre de cases à parcourir. Par défaut, 1.
-            :param side: Direction ("forward" ou "backward"). Par défaut, "forward".
-            :param emotion: Déclenche ou non l'émotion après le déplacement. Par défaut, True.
+        Avance ou recule de 'case' cases. Déclenche une émotion si activé.
+        :param case: Nombre de cases à parcourir (défaut: 1).
+        :param side: "forward" ou "backward" (défaut: forward).
+        :param emotion: Active l'émotion après déplacement (défaut: True).
         """
         if (side == "forward"):
             self.marty.walk(num_steps=case*7, start_foot='auto',
@@ -94,9 +95,10 @@ class Moves:
 
     def sidecase(self, case: int = 1, side: str = "right", emotion: bool = True):
         """
-            :param case: Nombre de cases à parcourir. Par défaut, 1.
-            :param side: Direction ("right" ou "left"). Par défaut, "right".
-            :param emotion: Déclenche ou non l'émotion après le déplacement. Par défaut, True.
+        Déplacement latéral de 'case' cases. Déclenche une émotion si activé.
+        :param case: Nombre de cases à parcourir (défaut: 1).
+        :param side: "right" ou "left" (défaut: right).
+        :param emotion: Active l'émotion après déplacement (défaut: True).
         """
         self.marty.sidestep(side=side, steps=case*7,
                             step_length=35, move_time=1000, blocking=False)
@@ -125,7 +127,8 @@ class Moves:
 
     def turn(self, side: str = "left"):
         """
-            :param side: Direction du tour ("left" pour gauche ou "right" pour droite). Par défaut, "left".
+        Tourne sur lui-même à gauche ou à droite.
+        :param side: "left" ou "right" (défaut: left).
         """
         if side == "left":
             self.marty.arms(left_angle=0, right_angle=135,
@@ -159,6 +162,10 @@ class Moves:
                             move_time=500, blocking=False)
 
     def calibration_path(self, size: int):
+        """
+        Effectue un parcours en spirale pour calibrer les couleurs.
+        :param size: Taille impaire de la grille (ex: grille 3x3 => 3).
+        """
         if size % 2 == 0 or size < 1:
             raise ValueError(
                 "La taille de la grille doit être un nombre impair et >= 1")
