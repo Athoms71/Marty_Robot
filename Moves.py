@@ -4,18 +4,38 @@ import file_management as fm
 from emotions import Emotions
 import time
 
+
 class Moves:
     def __init__(self, marty: Marty):
+        """
+        Initialise la classe Moves avec une instance de Marty et une position initiale.
+
+        Args:
+            marty (Marty): Instance du robot Marty.
+        """
         self.marty = marty
         self.pos = [1, 0]
         self.emotions = Emotions(marty)
 
     def get_marty(self):
+        """
+        Retourne l'instance Marty associée.
+
+        Returns:
+            Marty: Instance du robot.
+        """
         return self.marty
 
     def go_to_origin(self, dim: int):
-        dx = self.pos[0] - (dim - 1)//2
-        dy = self.pos[1] - (dim - 1)//2
+        """
+        Ramène le robot au centre de la grille.
+
+        Args:
+            dim (int): Dimension de la grille (taille).
+        """
+        dx = self.pos[0] - (dim - 1) // 2
+        dy = self.pos[1] - (dim - 1) // 2
+
         if dx < 0:
             self.sidecase(-dx)
         elif dx > 0:
@@ -24,6 +44,7 @@ class Moves:
             self.walkcase(-dy, "backward")
         elif dy > 0:
             self.walkcase(dy)
+
         print("Le robot est actuellement au centre de la case")
 
     def react_after_move(self):
@@ -39,7 +60,8 @@ class Moves:
         # Recherche de la couleur approchée via robert.txt
         couleur = C.get_color_from_hexa(hexa)
         if couleur is None:
-            print(f"Aucune correspondance trouvée pour la couleur détectée : {hexa}")
+            print(
+                f"Aucune correspondance trouvée pour la couleur détectée : {hexa}")
             return
 
         # Lecture du fichier real.feels pour trouver l'émotion associée
@@ -74,20 +96,18 @@ class Moves:
         :param side: "forward" ou "backward" (défaut: forward).
         :param emotion: Active l'émotion après déplacement (défaut: True).
         """
-        if (side == "forward"):
+        if side == "forward":
             self.marty.walk(num_steps=case*7, start_foot='auto',
                             turn=0, step_length=25, move_time=1500, blocking=None)
             self.marty.walk(num_steps=1, start_foot='auto',
                             turn=0, step_length=2, move_time=1500, blocking=True)
-            # Mise à jour de la position
             dx, dy = self.pos
             self.pos = (dx, dy + case)
         else:
-            self.marty.walk(num_steps=case * 7, start_foot='auto',
+            self.marty.walk(num_steps=case*7, start_foot='auto',
                             turn=0, step_length=-25, move_time=1500, blocking=None)
             self.marty.walk(num_steps=1, start_foot='auto',
                             turn=0, step_length=-2, move_time=1500, blocking=True)
-            # Mise à jour de la position
             dx, dy = self.pos
             self.pos = (dx, dy - case)
         if emotion:  # On déclenche l’émotion uniquement si le booléen est True
@@ -102,20 +122,22 @@ class Moves:
         """
         self.marty.sidestep(side=side, steps=case*7,
                             step_length=35, move_time=1000, blocking=False)
-        # Mise à jour de la position
         dx, dy = self.pos
         if side == "right":
             self.pos = (dx + case, dy)
-        else:  # "left"
+        else:  # side == "left"
             self.pos = (dx - case, dy)
         if emotion:  # On déclenche l’émotion uniquement si le booléen est True
             self.react_after_move()
 
     def circletime(self, time: int = 1):
         """
-            :param time: Nombre de répétitions de la danse circulaire. Par défaut, 1.
+        Fait effectuer une danse circulaire au robot un certain nombre de fois.
+
+        Args:
+            time (int): Nombre de répétitions de la danse (par défaut 1).
         """
-        for i in range(time):
+        for _ in range(time):
             self.marty.arms(left_angle=0, right_angle=135,
                             move_time=500, blocking=False)
             self.marty.circle_dance(
@@ -133,12 +155,9 @@ class Moves:
         if side == "left":
             self.marty.arms(left_angle=0, right_angle=135,
                             move_time=500, blocking=False)
-            for i in range(2):
-                # Recul du pied gauche
+            for _ in range(2):
                 self.marty.walk(num_steps=1, start_foot='left',
                                 turn=0, step_length=-15, move_time=1500)
-
-                # Rotation autour du pied droit
                 self.marty.walk(num_steps=1, start_foot='right',
                                 turn=30, step_length=0, move_time=1500)
                 self.marty.walk(num_steps=1, start_foot='left',
@@ -148,12 +167,9 @@ class Moves:
         else:
             self.marty.arms(left_angle=0, right_angle=135,
                             move_time=500, blocking=False)
-            for i in range(2):
-                # Recul du pied droit
+            for _ in range(2):
                 self.marty.walk(num_steps=1, start_foot='right',
                                 turn=0, step_length=-15, move_time=1500)
-
-                # Rotation autour du pied gauche
                 self.marty.walk(num_steps=1, start_foot='left',
                                 turn=-30, step_length=0, move_time=1500)
                 self.marty.walk(num_steps=1, start_foot='right',
@@ -170,11 +186,11 @@ class Moves:
             raise ValueError(
                 "La taille de la grille doit être un nombre impair et >= 1")
 
-        steps = 1  # nombre de cases à parcourir dans une direction
-        total_steps = 1  # pour compter le nombre de cases parcourues
-        max_steps = size * size  # nombre total de cases à parcourir
+        steps = 1          # Nombre de cases à parcourir dans une direction avant de tourner
+        total_steps = 1    # Compteur du nombre total de cases parcourues
+        max_steps = size * size  # Nombre total de cases dans la grille
 
-        # Directions en alternance : droite, bas, gauche, haut
+        # Ordre des directions : droite, bas, gauche, haut
         directions = [
             ("sidecase", "right"),
             ("walkcase", "forward"),
@@ -184,24 +200,26 @@ class Moves:
 
         dir_index = 0
 
-        # APPEL INITIAL FONCTION CALIBRATION COULEUR
-        fm.create_file("fichier_couleur",2)
-        # On commence au centre, donc on effectue le déplacement en spirale
+        # Crée le fichier pour stocker les couleurs calibrées
+        fm.create_file("fichier_couleur", 2)
+
+        # Parcours en spirale sur toute la grille
         while total_steps < max_steps:
-            for _ in range(2):  # 2 fois à chaque "tour" (spirale)
+            for _ in range(2):  # Répéter deux fois par "tour" de spirale
                 action, side = directions[dir_index % 4]
                 for _ in range(steps):
                     if total_steps >= max_steps:
                         return  # toutes les cases ont été visitées
                     getattr(self, action)(1, side, emotion=False)
-                    #APPEL FONCTION CALIBRATION COULEUR
-                    couleur=""
-                    C.calibrate(self,couleur,"fichier_couleur")
+                    # APPEL FONCTION CALIBRATION COULEUR
+                    couleur = ""
+                    C.calibrate(self, couleur, "fichier_couleur")
                     total_steps += 1
                 dir_index += 1
             steps += 1
-        # On sait qu'à la fin on est en bas à droite
+
+        # Position finale en bas à droite
         self.pos = (size - 1, size - 1)
 
-        # Maintenant on peut retourner au centre
+        # Retour au centre
         self.go_to_origin(size)

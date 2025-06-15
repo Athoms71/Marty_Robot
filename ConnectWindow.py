@@ -2,10 +2,25 @@ from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLineEdit, QPushButton, QMessa
 from PyQt5.QtCore import pyqtSignal
 from martypy import Marty
 
+
 class ConnectWindow(QWidget):
-    marty_connected = pyqtSignal(object)  # Signal émis si Marty est connecté avec succès
+    """
+    Fenêtre de connexion à Marty via Wi-Fi.
+
+    Cette classe permet à l'utilisateur d'entrer l'adresse IP du robot Marty, 
+    d'établir la connexion et d'émettre un signal lorsque la connexion est réussie.
+
+    Attributes:
+        marty_connected (pyqtSignal): Signal émis avec l'objet Marty connecté.
+    """
+
+    # Signal émis si Marty est connecté avec succès
+    marty_connected = pyqtSignal(object)
 
     def __init__(self):
+        """
+        Initialise la fenêtre de connexion avec un champ IP et un bouton Connecter.
+        """
         super().__init__()
         self.setWindowTitle("Connexion à Optimus Prime")
         self.resize(300, 150)
@@ -22,9 +37,21 @@ class ConnectWindow(QWidget):
         self.setLayout(layout)
 
     def connect_to_marty(self):
+        """
+        Tente de se connecter au robot Marty à l'adresse IP donnée.
+
+        - Récupère l'adresse IP entrée par l'utilisateur.
+        - Tente d'instancier un objet Marty en mode Wi-Fi avec cette IP.
+        - Si la connexion est prête, émet le signal `marty_connected` avec l'objet Marty.
+        - Sinon, affiche un message d'erreur.
+
+        Returns:
+            None
+        """
         ip = self.ip_input.text().strip()
         if not ip:
-            QMessageBox.warning(self, "Erreur", "Veuillez entrer une adresse IP.")
+            QMessageBox.warning(
+                self, "Erreur", "Veuillez entrer une adresse IP.")
             return
 
         try:
@@ -35,4 +62,5 @@ class ConnectWindow(QWidget):
             self.marty_connected.emit(marty)  # Émet le Marty connecté
             self.close()
         except Exception as e:
-            QMessageBox.critical(self, "Erreur", f"Échec de la connexion à Marty : {str(e)}")
+            QMessageBox.critical(
+                self, "Erreur", f"Échec de la connexion à Marty : {str(e)}")
