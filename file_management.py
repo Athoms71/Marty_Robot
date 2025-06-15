@@ -14,6 +14,7 @@ def read_file(fichier: str):
     file.close()
     return couleurs
 
+
 def read_file_hexatocolor(fichier: str,hexa:str):
     file= open(fichier+".txt", 'r')
     lines = file.readlines()
@@ -69,3 +70,18 @@ def create_file(name: str, type: int):   # 0= dance, 1 = feel, 2 = couleur
     else:
         print("Type not recognized")
         return
+
+def edit_feel_file(feel:list):
+    create_file("new", 1)
+    try:
+        fichier = open("new.feel", 'a')
+    except Exception as e:
+        print(f"Failed to open file new.feel: {e}")
+    #fait une liste de chaque action contenu dans feel
+    for action in feel:
+        if len(action) == 3 :
+            try:
+                fichier.write(f'{action[0]};{action[1]};{action[2]}\n')
+            except Exception as e:
+                print(f"Failed to write in file new.feel: {e}")
+    fichier.close()
