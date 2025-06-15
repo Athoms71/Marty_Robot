@@ -67,10 +67,11 @@ class Moves:
         else:
             print(f"L'émotion n'existe pas")
 
-    def walkcase(self, case: int = 1, side: str = "forward"):
+    def walkcase(self, case: int = 1, side: str = "forward", emotion: bool = True):
         """
             :param case: Nombre de cases à parcourir. Par défaut, 1.
             :param side: Direction ("forward" ou "backward"). Par défaut, "forward".
+            :param emotion: Déclenche ou non l'émotion après le déplacement. Par défaut, True.
         """
         if (side == "forward"):
             self.marty.walk(num_steps=case*7, start_foot='auto',
@@ -88,12 +89,14 @@ class Moves:
             # Mise à jour de la position
             dx, dy = self.pos
             self.pos = (dx, dy - case)
-        self.react_after_move()  # Appelle l'émotion
+        if emotion:  # On déclenche l’émotion uniquement si le booléen est True
+            self.react_after_move()
 
-    def sidecase(self, case: int = 1, side: str = "right"):
+    def sidecase(self, case: int = 1, side: str = "right", emotion: bool = True):
         """
             :param case: Nombre de cases à parcourir. Par défaut, 1.
             :param side: Direction ("right" ou "left"). Par défaut, "right".
+            :param emotion: Déclenche ou non l'émotion après le déplacement. Par défaut, True.
         """
         self.marty.sidestep(side=side, steps=case*7,
                             step_length=35, move_time=1000, blocking=False)
@@ -103,7 +106,8 @@ class Moves:
             self.pos = (dx + case, dy)
         else:  # "left"
             self.pos = (dx - case, dy)
-        self.react_after_move()  # Appelle l'émotion
+        if emotion:  # On déclenche l’émotion uniquement si le booléen est True
+            self.react_after_move()
 
     def circletime(self, time: int = 1):
         """
@@ -182,7 +186,7 @@ class Moves:
                 for _ in range(steps):
                     if total_steps >= max_steps:
                         return  # toutes les cases ont été visitées
-                    getattr(self, action)(1, side)
+                    getattr(self, action)(1, side, emotion=False)
                     #APPEL FONCTION CALIBRATION COULEUR
                     couleur=""
                     C.calibrate(self,couleur,"fichier_couleur")
