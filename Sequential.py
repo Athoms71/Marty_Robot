@@ -220,5 +220,4 @@ class Sequential:
             elif direction == "L" and self.check_edges([-count, 0], int(self.dim[4])):
                 self.moves.sidecase(count, "left")
 
-            while self.robot.is_moving():
-                time.sleep(0.1)
+            time.sleep(10)

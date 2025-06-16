@@ -50,10 +50,16 @@ class MainWindow(QWidget):
         self.position_label.setStyleSheet("color: white; font-size: 16px; background-color: rgba(0, 0, 0, 100);")
         self.position_label.setGeometry(1100, 50, 150, 30)
 
+        # Distance Label
+        self.distance_label = QLabel(self)
+        self.distance_label.setStyleSheet("color: white; font-size: 16px; background-color: rgba(0, 0, 0, 100);")
+        self.distance_label.setGeometry(1100, 90, 150, 30)
+
         # Timer
         self.timer = QTimer()
         self.timer.timeout.connect(self.update_battery)
         self.timer.timeout.connect(self.update_position)
+        self.timer.timeout.connect(self.update_distance)
         self.timer.start(500)
 
         # Préchargement des icônes de track
@@ -86,6 +92,8 @@ class MainWindow(QWidget):
         btn_left = make_button('btn_left.png', 100, self.on_btn_left_clicked)
         btn_rotate_left = make_button('btn_rotate_left.png', 100, self.on_btn_rotate_left_clicked)
         btn_rotate_right = make_button('btn_rotate_right.png', 100, self.on_btn_rotate_right_clicked)
+        btn_right_arm = make_button('btn_right_arm.png', 100, self.on_btn_right_arm_clicked)
+        btn_left_arm = make_button('btn_left_arm.png', 100, self.on_btn_left_arm_clicked)
 
         btn_dominance_dance = make_button('btn_dominance_dance.png', 100, self.on_btn_dominance_dance_clicked)
         btn_circle_dance = make_button('btn_circle_dance.jpg', 100, self.on_btn_circle_dance_clicked)
@@ -135,6 +143,8 @@ class MainWindow(QWidget):
         grid_moves.addWidget(btn_left, 1, 0)
         grid_moves.addWidget(btn_rotate_left, 0, 0)
         grid_moves.addWidget(btn_rotate_right, 0, 2)
+        grid_moves.addWidget(btn_right_arm, 2, 2)
+        grid_moves.addWidget(btn_left_arm, 2, 0)
 
         grid_dances = QGridLayout()
         grid_dances.addWidget(btn_dominance_dance, 0, 0)
@@ -232,6 +242,9 @@ class MainWindow(QWidget):
     def update_position(self):
         self.position_label.setText("Position: " + str(self.moves.pos))
 
+    def update_distance(self):
+        self.distance_label.setText("Distance: " + str(self.capteur.get_distance()))
+
 
     def on_btn_forward_clicked(self):
         if self.mode == 0:
@@ -273,6 +286,20 @@ class MainWindow(QWidget):
         if self.mode == 0 and self.moves.marty and not self.moves.marty.is_moving():
             self.moves.turn("right")
 
+    def on_btn_right_arm_clicked(self):
+        if self.mode == 0 and self.moves.marty and not self.moves.marty.is_moving():
+            self.moves.get_marty().arms(left_angle=0, right_angle=135,
+                                        move_time=500, blocking=True)
+            self.moves.get_marty().arms(left_angle=0, right_angle=0,
+                                        move_time=500, blocking=True)
+
+    def on_btn_left_arm_clicked(self):
+        if self.mode == 0 and self.moves.marty and not self.moves.marty.is_moving():
+            self.moves.get_marty().arms(left_angle=135, right_angle=0,
+                                        move_time=500, blocking=True)
+            self.moves.get_marty().arms(left_angle=0, right_angle=0,
+                                        move_time=500, blocking=True)
+
     def keyPressEvent(self, event):
         # Ne rien faire si le focus est sur un champ texte (comme QLineEdit)
         if isinstance(self.focusWidget(), QLineEdit):
@@ -310,8 +337,7 @@ class MainWindow(QWidget):
 
 
     def on_btn_calibrate_clicked(self):
-        if self.moves.marty and not self.moves.marty.is_moving():
-            self.moves.calibration_path(self.grid_size)
+        self.moves.calibration_path(self.grid_size)
 
     def on_input_grid_size_changed(self, text):
         if text not in {"3", "5", "7"}:

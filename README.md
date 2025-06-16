@@ -2,6 +2,8 @@
 
 Ce projet est une application Python développée dans le cadre d’un travail collaboratif, visant à analyser et gérer les mouvements et émotions du robot Marty dans une interface graphique. Il comprend plusieurs modules pour le suivi en temps réel, la gestion de séquences, et l’analyse de données sensorielles ou gestuelles.
 
+![Aperçu de l'application](readme_image.jpg)
+
 ## Contenu du Projet
 
 Le projet se compose des fichiers suivants :
