@@ -104,12 +104,12 @@ def hexa_to_rgb(hexa: str):
 
 def get_color_from_hexa(hexa: str):
     """
-    Retourne le nom de la couleur la plus proche dans 'robert.txt'.
+    Retourne le nom de la couleur la plus proche dans 'fichier_couleur.txt'.
     :param hexa: Couleur hexadécimale à comparer.
     """
     try:
-        # Lecture du fichier robert.txt contenant les couples (nom_couleur;code_hex)
-        colours = file_management.read_file("robert")
+        # Lecture du fichier fichier_couleur.txt contenant les couples (nom_couleur;code_hex)
+        colours = file_management.read_file("fichier_couleur")
     except:
         return None
 
