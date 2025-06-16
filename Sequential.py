@@ -191,12 +191,15 @@ class Sequential:
 
     def play_dance(self):
         """
-        Exécute la séquence de mouvements en contrôlant Marty.
+        Exécute la séquence de mouvements définie dans `self.list_moves`.
 
-        Gère les déplacements en mode séquentiel ('SEQ') ou absolu ('ABS'),
-        en respectant les limites de la grille.
+        Chaque mouvement est de la forme "3U", "2L", etc., où :
+            - Le chiffre indique le nombre de pas.
+            - La lettre indique la direction : U (up), B (back), R (right), L (left).
 
-        Attend la fin de chaque mouvement avant de commencer le suivant.
+        Le robot commence au centre de la grille SEQ. Avant chaque déplacement,
+        les limites sont vérifiées. L'exécution attend que le robot termine
+        un mouvement avant de passer au suivant.
         """
         center = (int(self.dim[4]) - 1) // 2
         self.moves.pos = [center, center]
@@ -215,31 +218,3 @@ class Sequential:
 
             while self.robot.is_moving():
                 time.sleep(0.1)
-
-        """
-        if self.dim.startswith("ABS"):
-            for move in self.list_moves:
-                if len(move) != 2 or not move.isdigit():
-                    print(f"Mouvement invalide : {move}")
-                    continue
-
-                target_x = int(move[0])
-                target_y = int(move[1])
-                current_x, current_y = self.moves.pos
-                dx = target_x - current_x
-                dy = target_y - current_y
-
-                # Déplacement horizontal (gauche/droite)
-                if dx > 0:
-                    self._do_and_wait(self.moves.sidecase, dx, "right")
-                elif dx < 0:
-                    self._do_and_wait(self.moves.sidecase, -dx, "left")
-                self.moves.pos[0] = target_x  # mise à jour après le déplacement
-
-                # Déplacement vertical (avant/arrière)
-                if dy > 0:
-                    self._do_and_wait(self.moves.walkcase, dy, "backward")
-                elif dy < 0:
-                    self._do_and_wait(self.moves.walkcase, -dy, "forward")
-                self.moves.pos[1] = target_y  # mise à jour après le déplacement
-        """
