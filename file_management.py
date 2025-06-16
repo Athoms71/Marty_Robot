@@ -71,17 +71,16 @@ def create_file(name: str, type: int):   # 0= dance, 1 = feel, 2 = couleur
         print("Type not recognized")
         return
 
-def edit_feel_file(feel:list):
-    create_file("new", 1)
+def edit_feel_file(feel: list, filename: str = "new"):
     try:
-        fichier = open("new.feel", 'a')
+        create_file(filename, 1)
+        with open(f"{filename}.feel", 'a') as fichier:
+            for action in feel:
+                if len(action) == 3:
+                    fichier.write(f'{action[0]};{action[1]};{action[2]}\n')
+                else:
+                    print(f"Action ignorée (format incorrect) : {action}")
+        return True
     except Exception as e:
-        print(f"Failed to open file new.feel: {e}")
-    #fait une liste de chaque action contenu dans feel
-    for action in feel:
-        if len(action) == 3 :
-            try:
-                fichier.write(f'{action[0]};{action[1]};{action[2]}\n')
-            except Exception as e:
-                print(f"Failed to write in file new.feel: {e}")
-    fichier.close()
+        print(f"Erreur lors de l'édition du fichier {filename}.feel : {e}")
+        return False 
