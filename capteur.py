@@ -37,7 +37,6 @@ class Capteur:
         Returns:
             float: Distance détectée, ou None si erreur.
         """
-        print("Marty's distance:")
         try:
             return float(self.marty.get_distance_sensor())
         except Exception as e:
