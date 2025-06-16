@@ -1,6 +1,7 @@
 from Moves import Moves
 from martypy import Marty
 import time
+import os
 
 
 class Sequential:
@@ -15,8 +16,8 @@ class Sequential:
         self.robot = moves.get_marty()
         # Liste des mouvements sous forme de chaînes (ex: "3U")
         self.list_moves = []
-        # Format et dimension de la séquence (ex: 'SEQ 3')
-        self.dim = 'SEQ 3'
+        # Dimension de la séquence (it will always write SEQ x)
+        self.dim = 3
 
     def get_list_moves(self) -> list[str]:
         """
@@ -42,7 +43,43 @@ class Sequential:
         Supprime le dernier mouvement ajouté dans la liste des mouvements.
         """
         if self.list_moves:
-            self.list_moves.pop()
+            self.list_moves.pop(-1)
+
+
+    def convert_abs_to_seq(self, positions):
+            """
+            Convertit une liste de positions absolues en une liste de mouvements séquentiels.
+
+            Args:
+                positions (list of tuple): Liste des positions (x, y) successives.
+
+            Returns:
+                list of str: Liste des mouvements au format SEQ (ex: '2U', '1R', etc.).
+            """
+            seq_moves = []
+            for i in range(1, len(positions)):
+                x0, y0 = positions[i - 1]
+                x1, y1 = positions[i]
+
+                dx = x1 - x0
+                dy = y1 - y0
+
+                # On gère uniquement les mouvements en ligne droite (horizontal ou vertical)
+                if dx != 0 and dy != 0:
+                    print(f"Warning: déplacement diagonal ignoré entre {positions[i-1]} et {positions[i]}")
+                    continue
+
+                # Convertir déplacement en mouvement SEQ
+                if dx > 0:
+                    seq_moves.append(f"{dx}R")
+                elif dx < 0:
+                    seq_moves.append(f"{-dx}L")
+                elif dy > 0:
+                    seq_moves.append(f"{dy}B")  # Bas (Back)
+                elif dy < 0:
+                    seq_moves.append(f"{-dy}U")  # Haut (Up)
+
+            return seq_moves
 
     def load_dance(self, file_path: str):
         """
@@ -50,40 +87,92 @@ class Sequential:
 
         Args:
             file_path (str): Chemin vers le fichier à charger.
-
-        Note:
-            Le fichier doit commencer par une ligne indiquant la dimension (ex: 'SEQ 3').
-            Ensuite chaque ligne correspond à un mouvement (ex: '3U').
         """
-        self.list_moves = []
-        if file_path.endswith(".dance"):
+
+        if not file_path.endswith(".dance"):
+            print("Erreur : le fichier doit avoir l'extension .dance")
+            return
+
+        if not os.path.exists(file_path):
+            print("Erreur : le fichier n'existe pas.")
+            return
+
+        try:
             with open(file_path, "r") as fichier:
                 lines = fichier.readlines()
-                self.dim = lines[0].strip()
-                self.list_moves = [line.strip()
-                                   for line in lines[1:] if len(line.strip()) == 3]
-            print("Fichier chargé avec succès.")
-        else:
-            print("Le fichier est introuvable.")
 
-    def save_dance(self, file_path: str):
+                if not lines:
+                    print("Erreur : le fichier est vide.")
+                    return
+
+                self.list_moves = []  # Réinitialise la liste des mouvements
+                header = lines[0].strip()
+                moves_lines = [line.strip() for line in lines[1:] if line.strip()]
+
+                if header.startswith("SEQ"):
+                    # Chargement direct
+                    self.list_moves = moves_lines
+                elif header.startswith("ABS"):
+                    # Conversion des positions absolues en mouvements séquentiels
+                    positions = [(int(move[1]), int(move[0])) for move in moves_lines]
+                    self.list_moves = self.convert_abs_to_seq(positions)
+                else:
+                    print("Format de fichier non reconnu.")
+                    return
+
+                print("Fichier chargé avec succès.")
+
+        except Exception as e:
+            print(f"Erreur lors du chargement du fichier : {e}")
+
+    def save_dance(self, file_path: str, dim: int):
         """
-        Sauvegarde la liste des mouvements dans un fichier .dance.
+        Sauvegarde la liste des mouvements dans un fichier .dance,
+        en compressant les mouvements successifs ayant le même type (U, B, L, R).
 
         Args:
             file_path (str): Chemin où enregistrer la séquence.
-
-        Note:
-            Le fichier est écrit uniquement si l'extension est '.dance'.
+            dim (int): Taille de la grille (ex: 3 pour SEQ 3).
         """
-        if file_path.endswith(".dance"):
+        if not file_path.endswith(".dance"):
+            print("Erreur : l'extension du fichier doit être .dance")
+            return
+
+        try:
+            self.dim = dim
             with open(file_path, "w") as fichier:
-                fichier.write(f"{self.dim}\n")
-                for move in self.list_moves:
-                    fichier.write(f"{move}\n")
+                fichier.write(f"SEQ {self.dim}\n")
+
+                if not self.list_moves:
+                    print("Aucun mouvement à sauvegarder.")
+                    return
+
+                # Initialisation avec le premier mouvement
+                current_move = self.list_moves[0]
+                current_count = int(current_move[:-1])  # Partie numérique
+                current_dir = current_move[-1]  # Dernier caractère, ex: 'U'
+
+                for move in self.list_moves[1:]:
+                    direction = move[-1]
+                    count = int(move[:-1])
+
+                    if direction == current_dir:
+                        current_count += count
+                    else:
+                        # Écrit le mouvement compressé
+                        fichier.write(f"{current_count}{current_dir}\n")
+                        # Réinitialise
+                        current_dir = direction
+                        current_count = count
+
+                # Écrit le dernier mouvement
+                fichier.write(f"{current_count}{current_dir}\n")
+
             print("Fichier enregistré avec succès.")
-        else:
-            print("Le fichier est introuvable.")
+            print(self.list_moves)
+        except Exception as e:
+            print(f"Erreur lors de la sauvegarde du fichier : {e}")
+
 
     def check_edges(self, deplacement: list[int], dim: int) -> bool:
         """
@@ -102,48 +191,30 @@ class Sequential:
 
     def play_dance(self):
         """
-        Exécute la séquence de mouvements en contrôlant Marty.
+        Exécute la séquence de mouvements définie dans `self.list_moves`.
 
-        Gère les déplacements en mode séquentiel ('SEQ') ou absolu ('ABS'),
-        en respectant les limites de la grille.
+        Chaque mouvement est de la forme "3U", "2L", etc., où :
+            - Le chiffre indique le nombre de pas.
+            - La lettre indique la direction : U (up), B (back), R (right), L (left).
 
-        Attend la fin de chaque mouvement avant de commencer le suivant.
+        Le robot commence au centre de la grille SEQ. Avant chaque déplacement,
+        les limites sont vérifiées. L'exécution attend que le robot termine
+        un mouvement avant de passer au suivant.
         """
         center = (int(self.dim[4]) - 1) // 2
         self.moves.pos = [center, center]
 
-        if self.dim.startswith("SEQ"):
-            for move in self.list_moves:
-                count = int(move[0])
-                direction = move[1]
-                if direction == "U" and self.check_edges([0, -count], int(self.dim[4])):
-                    self.moves.walkcase(count, "forward")
-                elif direction == "B" and self.check_edges([0, count], int(self.dim[4])):
-                    self.moves.walkcase(count, "backward")
-                elif direction == "R" and self.check_edges([count, 0], int(self.dim[4])):
-                    self.moves.sidecase(count, "right")
-                elif direction == "L" and self.check_edges([-count, 0], int(self.dim[4])):
-                    self.moves.sidecase(count, "left")
+        for move in self.list_moves:
+            count = int(move[:-1])
+            direction = move[-1]
+            if direction == "U" and self.check_edges([0, -count], int(self.dim[4])):
+                self.moves.walkcase(count, "forward")
+            elif direction == "B" and self.check_edges([0, count], int(self.dim[4])):
+                self.moves.walkcase(count, "backward")
+            elif direction == "R" and self.check_edges([count, 0], int(self.dim[4])):
+                self.moves.sidecase(count, "right")
+            elif direction == "L" and self.check_edges([-count, 0], int(self.dim[4])):
+                self.moves.sidecase(count, "left")
 
-                while self.robot.is_moving():
-                    time.sleep(0.1)
-
-        elif self.dim.startswith("ABS"):
-            for move in self.list_moves:
-                count = int(move[0])
-                direction = move[1]
-                if direction == "U" and self.check_edges([0, -count], int(self.dim[4])):
-                    self.moves.walkcase(count, "forward")
-                    self.robot.pos[1] -= count
-                elif direction == "B" and self.check_edges([0, count], int(self.dim[4])):
-                    self.moves.walkcase(count, "backward")
-                    self.robot.pos[1] += count
-                elif direction == "R" and self.check_edges([count, 0], int(self.dim[4])):
-                    self.moves.sidecase(count, "right")
-                    self.robot.pos[0] += count
-                elif direction == "L" and self.check_edges([-count, 0], int(self.dim[4])):
-                    self.moves.sidecase(count, "left")
-                    self.robot.pos[0] -= count
-
-                while self.robot.is_moving():
-                    time.sleep(0.1)
+            while self.robot.is_moving():
+                time.sleep(0.1)

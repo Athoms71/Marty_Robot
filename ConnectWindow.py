@@ -23,7 +23,7 @@ class ConnectWindow(QWidget):
         """
         super().__init__()
         self.setWindowTitle("Connexion à Optimus Prime")
-        self.resize(300, 150)
+        self.resize(400, 150)
 
         self.ip_input = QLineEdit(self)
         self.ip_input.setPlaceholderText("192.168.1.2")
@@ -50,17 +50,21 @@ class ConnectWindow(QWidget):
         """
         ip = self.ip_input.text().strip()
         if not ip:
-            QMessageBox.warning(
-                self, "Erreur", "Veuillez entrer une adresse IP.")
-            return
-
-        try:
-            marty = Marty(method="wifi", locator=ip)
-            if not marty.is_conn_ready():
-                raise Exception("Connexion échouée")
-            QMessageBox.information(self, "Succès", "Marty est connecté !")
-            self.marty_connected.emit(marty)  # Émet le Marty connecté
+            marty = None
+            QMessageBox.information(self, "Succès", "Lancement du programme sans Marty.")
+            self.marty_connected.emit(marty)  # Émet le Marty vide
             self.close()
-        except Exception as e:
-            QMessageBox.critical(
-                self, "Erreur", f"Échec de la connexion à Marty : {str(e)}")
+
+        else:
+            try:
+                marty = Marty(method="wifi", locator=ip)
+                if not marty.is_conn_ready():
+                    raise Exception("Connexion échouée")
+                
+                marty.get_ready() # Prépare le robot après connexion
+                QMessageBox.information(self, "Succès", "Optimus Prime connecté.")
+                self.marty_connected.emit(marty)  # Émet le Marty connecté
+                self.close()
+            except Exception as e:
+                QMessageBox.critical(
+                    self, "Erreur", f"Échec de la connexion à Optimus Prime : {str(e)}")

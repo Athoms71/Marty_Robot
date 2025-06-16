@@ -44,7 +44,6 @@ def main():
             marty (Marty): Instance connectée du robot Marty.
         """
         print("Optimus Prime connected")
-        marty.get_ready() # Prépare le robot après connexion
 
         # Initialisation des modules principaux
         moves = Moves(marty)

@@ -39,7 +39,7 @@ class MouseTrackingWindow(QWidget):
         self.exit_button = QPushButton("Quitter", self)
         self.exit_button.setFixedSize(100, 100)
         self.exit_button.move(self.width() // 2 - 50, self.height() // 2 - 50)
-        self.exit_button.clicked.connect(self.close)
+        self.exit_button.clicked.connect(self.close)  # Fermer la fenêtre
 
         self.show()
 
