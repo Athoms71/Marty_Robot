@@ -205,9 +205,9 @@ class Moves:
 
         # Parcours en spirale sur toute la grille
         while total_steps < max_steps:
-            for _ in range(2):  # Répéter deux fois par "tour" de spirale
+            for i in range(2):  # Répéter deux fois par "tour" de spirale
                 action, side = directions[dir_index % 4]
-                for _ in range(steps):
+                for j in range(steps):
                     if total_steps >= max_steps:
                         return  # toutes les cases ont été visitées
                     getattr(self, action)(1, side, emotion=False)
