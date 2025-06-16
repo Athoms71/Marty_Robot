@@ -50,10 +50,16 @@ class MainWindow(QWidget):
         self.position_label.setStyleSheet("color: white; font-size: 16px; background-color: rgba(0, 0, 0, 100);")
         self.position_label.setGeometry(1100, 50, 150, 30)
 
+        # Distance Label
+        self.distance_label = QLabel(self)
+        self.distance_label.setStyleSheet("color: white; font-size: 16px; background-color: rgba(0, 0, 0, 100);")
+        self.distance_label.setGeometry(1100, 90, 150, 30)
+
         # Timer
         self.timer = QTimer()
         self.timer.timeout.connect(self.update_battery)
         self.timer.timeout.connect(self.update_position)
+        self.timer.timeout.connect(self.update_distance)
         self.timer.start(500)
 
         # Préchargement des icônes de track
@@ -232,6 +238,9 @@ class MainWindow(QWidget):
     def update_position(self):
         self.position_label.setText("Position: " + str(self.moves.pos))
 
+    def update_distance(self):
+        self.distance_label.setText("Distance: " + str(self.capteur.get_distance()))
+
 
     def on_btn_forward_clicked(self):
         if self.mode == 0:
@@ -310,8 +319,7 @@ class MainWindow(QWidget):
 
 
     def on_btn_calibrate_clicked(self):
-        if self.moves.marty and not self.moves.marty.is_moving():
-            self.moves.calibration_path(self.grid_size)
+        self.moves.calibration_path(self.grid_size)
 
     def on_input_grid_size_changed(self, text):
         if text not in {"3", "5", "7"}:
