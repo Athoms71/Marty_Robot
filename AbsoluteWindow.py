@@ -5,7 +5,7 @@ from random import randint
 
 
 class AbsoluteWindow(QWidget):
-    def __init__(self, dim: int):
+    def __init__(self, dim: int, file_name: str, main_window):
         """
         Initialise la fenêtre avec une grille de boutons.
 
@@ -13,7 +13,9 @@ class AbsoluteWindow(QWidget):
             dim (int): Dimension de la grille (nombre de lignes et colonnes).
         """
         super().__init__()
+        self.main_window = main_window
         self.dim = dim
+        self.file_name = file_name
         self.list_actions = []  # Stocke les actions (clics sur les boutons)
         self.setWindowTitle("Construction du parcours en absolu")
         self.setFixedSize(150 * dim, 130 * dim)
@@ -29,12 +31,26 @@ class AbsoluteWindow(QWidget):
                 btn.clicked.connect(
                     lambda _, r=row, c=col: self.handle_cell_click(r, c))
 
-        # Bouton "Quitter" centré en bas
+        button_width = dim * 20
+        button_height = 50
+        spacing = 20  # espace entre les boutons
+
+        total_width = button_width * 2 + spacing
+        start_x = (self.width() - total_width) // 2
+        y_pos = self.height() - button_height - 20  # 20 px au-dessus du bord bas
+
+        # Bouton "Quitter"
         self.exit_button = QPushButton("Quitter", self)
-        self.exit_button.setFixedSize(dim * 20, 50)
-        self.exit_button.move(self.width() // 2 - dim *
-                              10, self.height() - 10 * dim - 50)
-        self.exit_button.clicked.connect(self.closeEvent)  # Fermer la fenêtre
+        self.exit_button.setFixedSize(button_width, button_height)
+        self.exit_button.move(start_x, y_pos)
+        self.exit_button.clicked.connect(self.close)
+
+        # Bouton "Save"
+        self.save_btn = QPushButton("Save", self)
+        self.save_btn.setFixedSize(button_width, button_height)
+        self.save_btn.move(start_x + button_width + spacing, y_pos)
+        self.save_btn.clicked.connect(self.save_abs)
+
         self.show()
 
     def handle_cell_click(self, row: int, col: int):
@@ -48,36 +64,36 @@ class AbsoluteWindow(QWidget):
         # Ajoute la position cliquée à la liste d'actions
         self.list_actions.append(f"{row}{col}")
 
-    def save_abs(self, file_path: str):
+    def save_abs(self):
         """
-        Sauvegarde la liste des actions dans un fichier au format '.dance'.
+        Sauvegarde la liste des mouvements dans un fichier .dance.
 
         Args:
-            file_path (str): Chemin du fichier où enregistrer les actions.
+            file_path (str): Chemin où enregistrer la séquence.
 
         Note:
             Le fichier est écrit uniquement si l'extension est '.dance'.
         """
-        if file_path.endswith(".dance"):
-            with open(file_path, "w") as f:
-                f.write(f"ABS {self.dim}\n")
-                for move in self.list_actions:
-                    f.write(f"{move}\n")
+        if self.file_name.endswith(".dance"):
+            with open(self.file_name, "w") as fichier:
+                fichier.write(f"ABS {self.dim}\n")
+                for action in self.list_actions:
+                    fichier.write(f"{action}\n")
             print("Fichier enregistré avec succès.")
         else:
             print("Le fichier est introuvable.")
 
-    def closeEvent(self, event=None):
-        """
-        Gère la fermeture de la fenêtre.
+    def closeEvent(self, event):
+        # Rétablir le mode dans la fenêtre principale
+        self.main_window.mode = 0
+        self.main_window.update_icon_modes()
 
-        Args:
-            event (QCloseEvent, optional): Événement de fermeture.
+        # Supprimer la référence dans la fenêtre principale
+        # (remplacer 'absolute_window' par le nom réel de l'attribut si besoin)
+        if hasattr(self.main_window, "absolute_window"):
+            self.main_window.absolute_window = None
 
-        Sauvegarde automatiquement la liste des actions dans un fichier
-        avec un nom aléatoire si des actions ont été enregistrées.
-        """
-        if event is None:
-            if self.list_actions:
-                self.save_abs(f"{randint(0, 1000)}_auto.dance")
-            self.close()
+        # Demander la destruction de cet objet (libère les ressources)
+        self.deleteLater()
+
+        event.accept()

@@ -1,8 +1,10 @@
-from PyQt5.QtWidgets import QWidget, QPushButton, QGridLayout, QLabel
+from PyQt5.QtWidgets import QWidget, QPushButton, QGridLayout, QLabel, QLineEdit
 from PyQt5.QtGui import QIcon, QPixmap, QPalette, QBrush
 from PyQt5.QtCore import Qt, QTimer
 import os
 from MouseTrackingWindow import MouseTrackingWindow
+from AbsoluteWindow import AbsoluteWindow
+
 
 class MainWindow(QWidget):
     def __init__(self, moves, sequential, capteur):
@@ -11,12 +13,15 @@ class MainWindow(QWidget):
         self.resize(1280, 720)
 
         self.moves = moves
-        self.sequential = sequential
         self.capteur = capteur
-        self.mouse_tracking_window = None
 
-        self.sequence_file_name = "sequence.dance"
-        self.mode = 0   # 0 = normal, 1 = list mode, 2 = mouse mode
+        self.sequential = sequential
+        self.absolute_window = None     # Pour la fenêtre de parcours absolu
+        self.mouse_tracking_window = None # Pour la fenêtre de suivi de la souris
+
+        self.mode = 0                   # 0 = normal, 1 = seq mode, 2 = abs mode, 3 = mouse mode
+        self.sequence_file_name = ""    # Nom du fichier pour sauvegarder/charger la SEQ ou ABS
+        self.grid_size = 3              # Taille de la grille par défaut
         self.base_path = os.path.dirname(__file__)
 
         # Background Image
@@ -93,15 +98,31 @@ class MainWindow(QWidget):
         btn_clear_sequencial = make_button('btn_clear_sequential.png', 80, self.on_btn_clear_sequential_clicked)
 
         # Boutons de mode stockés comme attributs
-        btn_normal_mode = make_button('btn_normal_mode.png', 100, self.on_btn_normal_mode_clicked)
-        btn_sequential_mode = make_button('btn_sequential_mode.png', 100, self.on_btn_sequential_mode_clicked)
-        btn_mouse_mode = make_button('btn_mouse_mode.png', 100, self.on_btn_mouse_mode_clicked)
+        btn_normal_mode = make_button('btn_normal_mode1.png', 100, self.on_btn_normal_mode_clicked)
+        btn_sequential_mode = make_button('btn_sequential_mode1.png', 100, self.on_btn_sequential_mode_clicked)
+        btn_absolute_mode = make_button('btn_absolute_mode1.png', 100, self.on_btn_absolute_mode_clicked)
+        btn_mouse_mode = make_button('btn_mouse_mode1.png', 100, self.on_btn_mouse_mode_clicked)
+
+        # Champ de saisie pour le nom du fichier
+        input_file_name = QLineEdit(self)
+        input_file_name.setPlaceholderText("File name for save/load")
+        input_file_name.setFixedSize(200, 40)
+        input_file_name.setStyleSheet("background-color: white; font-size: 14px; padding: 2px;")
+        input_file_name.textChanged.connect(self.on_input_file_name_changed)
+
+        # Champ de saisie pour la taille de la grille
+        input_grid_size = QLineEdit(self)
+        input_grid_size.setPlaceholderText("Grid Size (3, 5, or 7)")
+        input_grid_size.setGeometry(700, 50, 150, 40)
+        input_grid_size.setStyleSheet("background-color: white; font-size: 14px; padding: 2px;")
+        input_grid_size.textChanged.connect(self.on_input_grid_size_changed)
 
         # Dictionnaire pour mise à jour des icônes
         self.mode_buttons = {
             0: btn_normal_mode,
             1: btn_sequential_mode,
-            2: btn_mouse_mode
+            2: btn_absolute_mode,
+            3: btn_mouse_mode
         }
         # Initialise les icônes de mode
         self.update_icon_modes()
@@ -127,11 +148,13 @@ class MainWindow(QWidget):
         grid_sequential.addWidget(btn_clear_sequencial, 0, 1)
         grid_sequential.addWidget(btn_save_sequencial, 0, 2)
         grid_sequential.addWidget(btn_load_sequencial, 0, 3)
+        grid_sequential.addWidget(input_file_name, 0, 4)
 
         grid_modes = QGridLayout()
         grid_modes.addWidget(btn_normal_mode, 0, 0)
         grid_modes.addWidget(btn_sequential_mode, 0, 1)
-        grid_modes.addWidget(btn_mouse_mode, 0, 2)
+        grid_modes.addWidget(btn_absolute_mode, 0, 2)
+        grid_modes.addWidget(btn_mouse_mode, 0, 3)
 
         # Containers
         container_moves = QWidget(self)
@@ -144,18 +167,18 @@ class MainWindow(QWidget):
 
         container_other = QWidget(self)
         container_other.setLayout(grid_other)
-        container_other.setGeometry(800, 10, 200, 200)
+        container_other.setGeometry(900, 10, 120, 120)
 
         container_sequential = QWidget(self)
         container_sequential.setLayout(grid_sequential)
-        container_sequential.setGeometry(420, 353, 400, 200)
+        container_sequential.setGeometry(405, 353, 700, 200)
 
         container_modes = QWidget(self)
         container_modes.setLayout(grid_modes)
         container_modes.setGeometry(10, 10, 400, 120)
 
     def update_icon_modes(self):
-        names = ['normal', 'sequential', 'mouse']
+        names = ['normal', 'sequential', 'absolute', 'mouse']
         for idx, btn in self.mode_buttons.items():
             suffix = '2' if idx == self.mode else '1'
             icon_path = os.path.join(self.base_path, 'buttons', f'btn_{names[idx]}_mode{suffix}.png')
@@ -178,11 +201,8 @@ class MainWindow(QWidget):
 
         nb = 0
         for move in moves:  # Ignore la première ligne
-            if len(move) == 2:
-                count = int(move[0])
-                direction = move[1]
-            else:
-                print("Formal invalide !")
+            count = int(move[:-1])
+            direction = move[-1]
             if direction in self.track_icons:
                 for j in range(count):  # Répète l'icône selon le nombre
                     if nb < 13:
@@ -254,7 +274,11 @@ class MainWindow(QWidget):
             self.moves.turn("right")
 
     def keyPressEvent(self, event):
-        if not self.moves.marty.is_moving():
+        # Ne rien faire si le focus est sur un champ texte (comme QLineEdit)
+        if isinstance(self.focusWidget(), QLineEdit):
+            return
+        
+        if self.moves.marty and not self.moves.marty.is_moving():
             key = event.key()
             if key == Qt.Key_Z:
                 print("Key Z - Forward")
@@ -286,7 +310,15 @@ class MainWindow(QWidget):
 
 
     def on_btn_calibrate_clicked(self):
-        pass
+        if self.moves.marty and not self.moves.marty.is_moving():
+            self.moves.calibration_path(self.grid_size)
+
+    def on_input_grid_size_changed(self, text):
+        if text not in {"3", "5", "7"}:
+            self.sender().setStyleSheet("background-color: #ffcccc;")  # rouge clair = invalide
+        else:
+            self.sender().setStyleSheet("background-color: white;")    # valide
+            self.grid_size = int(text)
 
 
     def on_btn_start_sequential_clicked(self):
@@ -298,11 +330,14 @@ class MainWindow(QWidget):
         self.update_icon_track()
 
     def on_btn_save_sequential_clicked(self):
-        self.sequential.save_dance(self.sequence_file_name)
+        self.sequential.save_dance(self.sequence_file_name, self.grid_size)
 
     def on_btn_load_sequential_clicked(self):
         self.sequential.load_dance(self.sequence_file_name)
         self.update_icon_track()
+
+    def on_input_file_name_changed(self, text):
+        self.sequence_file_name = text
 
 
     def on_btn_normal_mode_clicked(self):
@@ -313,8 +348,21 @@ class MainWindow(QWidget):
         self.mode = 1
         self.update_icon_modes()
 
-    def on_btn_mouse_mode_clicked(self):
+    def on_btn_absolute_mode_clicked(self):
         self.mode = 2
+        self.update_icon_modes()
+
+        # Vérifie que la fenêtre n'existe pas déjà ou a été fermée
+        if not hasattr(self, "absolute_window") or self.absolute_window is None:
+            self.absolute_window = AbsoluteWindow(self.grid_size, self.sequence_file_name, self)
+        elif not self.absolute_window.isVisible():
+            self.absolute_window.show()
+        else:
+            self.absolute_window.activateWindow()
+            self.absolute_window.raise_()
+        
+    def on_btn_mouse_mode_clicked(self):
+        self.mode = 3
         self.update_icon_modes()
 
         # Vérifie que la fenêtre n'existe pas déjà ou a été fermée
