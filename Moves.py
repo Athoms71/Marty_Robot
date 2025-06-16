@@ -14,7 +14,7 @@ class Moves:
             marty (Marty): Instance du robot Marty.
         """
         self.marty = marty
-        self.pos = [1, 0]
+        self.pos = (1, 1)
         self.emotions = Emotions(marty)
 
     def get_marty(self):

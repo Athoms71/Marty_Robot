@@ -45,41 +45,43 @@ class Sequential:
         if self.list_moves:
             self.list_moves.pop(-1)
 
+    def convert_abs_to_seq(self, positions, start_pos):
+        """
+        Convertit une liste de positions absolues en une liste de mouvements séquentiels.
 
-    def convert_abs_to_seq(self, positions):
-            """
-            Convertit une liste de positions absolues en une liste de mouvements séquentiels.
+        Args:
+            positions (list of tuple): Liste des positions (x, y) successives.
 
-            Args:
-                positions (list of tuple): Liste des positions (x, y) successives.
+        Returns:
+            list of str: Liste des mouvements au format SEQ (ex: '2U', '1R', etc.).
+        """
+        seq_moves = []
+        positions = [start_pos]+positions
+        for i in range(1, len(positions)):
+            x0, y0 = positions[i - 1]
+            x1, y1 = positions[i]
 
-            Returns:
-                list of str: Liste des mouvements au format SEQ (ex: '2U', '1R', etc.).
-            """
-            seq_moves = []
-            for i in range(1, len(positions)):
-                x0, y0 = positions[i - 1]
-                x1, y1 = positions[i]
+            dx = x1 - x0
+            dy = y1 - y0
 
-                dx = x1 - x0
-                dy = y1 - y0
-
-                # On gère uniquement les mouvements en ligne droite (horizontal ou vertical)
-                if dx != 0 and dy != 0:
-                    print(f"Warning: déplacement diagonal ignoré entre {positions[i-1]} et {positions[i]}")
-                    continue
-
-                # Convertir déplacement en mouvement SEQ
-                if dx > 0:
-                    seq_moves.append(f"{dx}R")
-                elif dx < 0:
-                    seq_moves.append(f"{-dx}L")
-                elif dy > 0:
-                    seq_moves.append(f"{dy}B")  # Bas (Back)
+            # Convertir déplacement en mouvement SEQ
+            if dx > 0:
+                if dy > 0:
+                    seq_moves.append(f"{dy}B")
                 elif dy < 0:
-                    seq_moves.append(f"{-dy}U")  # Haut (Up)
-
-            return seq_moves
+                    seq_moves.append(f"{-dy}U")
+                seq_moves.append(f"{dx}R")
+            elif dx < 0:
+                if dy > 0:
+                    seq_moves.append(f"{dy}B")
+                elif dy < 0:
+                    seq_moves.append(f"{-dy}U")
+                seq_moves.append(f"{-dx}L")
+            elif dy > 0:
+                seq_moves.append(f"{dy}B")  # Bas (Back)
+            elif dy < 0:
+                seq_moves.append(f"{-dy}U")  # Haut (Up)
+        return seq_moves
 
     def load_dance(self, file_path: str):
         """
@@ -107,15 +109,18 @@ class Sequential:
 
                 self.list_moves = []  # Réinitialise la liste des mouvements
                 header = lines[0].strip()
-                moves_lines = [line.strip() for line in lines[1:] if line.strip()]
+                moves_lines = [line.strip()
+                               for line in lines[1:] if line.strip()]
 
                 if header.startswith("SEQ"):
                     # Chargement direct
                     self.list_moves = moves_lines
                 elif header.startswith("ABS"):
                     # Conversion des positions absolues en mouvements séquentiels
-                    positions = [(int(move[1]), int(move[0])) for move in moves_lines]
-                    self.list_moves = self.convert_abs_to_seq(positions)
+                    positions = [(int(move[1]), int(move[0]))
+                                 for move in moves_lines]
+                    self.list_moves = self.convert_abs_to_seq(
+                        positions, self.moves.pos)
                 else:
                     print("Format de fichier non reconnu.")
                     return
@@ -173,7 +178,6 @@ class Sequential:
         except Exception as e:
             print(f"Erreur lors de la sauvegarde du fichier : {e}")
 
-
     def check_edges(self, deplacement: list[int], dim: int) -> bool:
         """
         Vérifie que le déplacement reste dans les limites de la grille.
@@ -202,7 +206,7 @@ class Sequential:
         un mouvement avant de passer au suivant.
         """
         center = (int(self.dim[4]) - 1) // 2
-        self.moves.pos = [center, center]
+        self.moves.pos = (center, center)
 
         for move in self.list_moves:
             count = int(move[:-1])
