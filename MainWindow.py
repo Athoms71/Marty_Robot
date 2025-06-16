@@ -378,24 +378,18 @@ class MainWindow(QWidget):
         self.mode = 2
         self.update_icon_modes()
 
-        # Vérifie que la fenêtre n'existe pas déjà ou a été fermée
-        if not hasattr(self, "absolute_window") or self.absolute_window is None:
+        # Vérifie que la fenêtre n'existe pas
+        if self.absolute_window is None:
             self.absolute_window = AbsoluteWindow(self.grid_size, self.sequence_file_name, self)
-        elif not self.absolute_window.isVisible():
-            self.absolute_window.show()
         else:
-            self.absolute_window.activateWindow()
-            self.absolute_window.raise_()
+            self.absolute_window.show()
         
     def on_btn_mouse_mode_clicked(self):
         self.mode = 3
         self.update_icon_modes()
 
-        # Vérifie que la fenêtre n'existe pas déjà ou a été fermée
-        if not hasattr(self, "mouse_tracking_window") or self.mouse_tracking_window is None:
+        # Vérifie que la fenêtre n'existe pas
+        if self.mouse_tracking_window is None:
             self.mouse_tracking_window = MouseTrackingWindow(self.moves.marty, self)
-        elif not self.mouse_tracking_window.isVisible():
-            self.mouse_tracking_window.show()
         else:
-            self.mouse_tracking_window.activateWindow()
-            self.mouse_tracking_window.raise_()
+            self.mouse_tracking_window.show()

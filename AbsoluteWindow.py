@@ -87,13 +87,5 @@ class AbsoluteWindow(QWidget):
         # Rétablir le mode dans la fenêtre principale
         self.main_window.mode = 0
         self.main_window.update_icon_modes()
-
-        # Supprimer la référence dans la fenêtre principale
-        # (remplacer 'absolute_window' par le nom réel de l'attribut si besoin)
-        if hasattr(self.main_window, "absolute_window"):
-            self.main_window.absolute_window = None
-
-        # Demander la destruction de cet objet (libère les ressources)
-        self.deleteLater()
-
+        self.main_window.absolute_window = None
         event.accept()
