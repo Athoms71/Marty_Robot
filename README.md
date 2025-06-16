@@ -75,10 +75,3 @@ projet/
 ## Licence
 
 Ce projet est soumis à une licence universitaire dans le cadre d’un travail d’étude. Pour tout usage ou redistribution, veuillez contacter les auteurs.
-
-## Perspectives d'amélioration
-
--   Intégration d’un vrai capteur (ex : Kinect, IMU)
--   Visualisation 3D des mouvements
--   Détection d’émotions en temps réel avec intelligence artificielle
--   Exportation des séquences au format vidéo ou CSV
