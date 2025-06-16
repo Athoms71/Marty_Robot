@@ -21,8 +21,8 @@ class AbsoluteWindow(QWidget):
         self.setFixedSize(150 * dim, 130 * dim)
 
         # Création d'une grille de boutons selon la dimension donnée
-        for row in range(dim):
-            for col in range(dim):
+        for col in range(dim):
+            for row in range(dim):
                 btn = QPushButton(f"{row},{col}", self)
                 btn.setFixedSize(75, 75)
                 btn.move(self.width() // 4 + 75 * col,
